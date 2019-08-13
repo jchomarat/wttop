@@ -7,5 +7,7 @@ namespace wttop.Helpers {
         int GetCPUsCount();
 
         IEnumerable<Cpu> GetCPUsUsage();
+
+        Memory GetMemoryUsage();
     }
 }

@@ -21,11 +21,25 @@ namespace wttop.Helpers {
 
             return results.Cast<ManagementObject>()
                 .Select(mo => new Tuple<string, string>(mo["name"].ToString(), mo["PercentProcessorTime"].ToString()));
-            // foreach (var mo in results)
-            // {
-            //     mo.
-            //     Console.WriteLine($"Proc: {mo["name"]}, usage: {mo["PercentProcessorTime"]}");
-            // }
+        }
+
+        public int GetNumberOfLogicalProcessors()
+        {
+            var queryString = "SELECT NumberOfLogicalProcessors FROM Win32_Processor";
+            var results = runQuery(queryString);
+
+            return Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["NumberOfLogicalProcessors"]);
+        }
+
+        public Tuple<int, int> GetMemoryUsageKb()
+        {
+            var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize FROM Win32_OperatingSystem";
+            var results = runQuery(queryString);
+
+            var available = Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["FreePhysicalMemory"]);
+            var total = Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["TotalVisibleMemorySize"]);
+            
+            return new Tuple<int, int>(total, available);
         }
     }
 }
