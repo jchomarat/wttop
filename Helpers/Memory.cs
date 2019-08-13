@@ -4,9 +4,15 @@ namespace wttop.Helpers {
 
     public class Memory {
         
-        public int TotalKb {get; set;}
+        public int TotalKb {get; set; }
        
-        public int AvailableKb {get;set;}
+        public int AvailableKb {get; set; }
+
+        public decimal AvailableGB {
+            get {
+                return Math.Round((decimal)AvailableKb/(1024*1024), 1); 
+            }
+        }
 
         public int UsedKb {
             get {
@@ -14,15 +20,15 @@ namespace wttop.Helpers {
             }
         }
 
-        public int UsedGB {
+        public decimal UsedGB {
             get {
-                return (int)Math.Floor((decimal)TotalKb/(1024*1024));
+                return Math.Round((decimal)UsedKb/(1024*1024), 1); 
             }
         }
 
-        public int TotalGB {
+        public decimal TotalGB {
             get {
-                return (int)Math.Floor((decimal)TotalKb/(1024*1024));
+                return Math.Round((decimal)TotalKb/(1024*1024), 1); 
             }
         }
 

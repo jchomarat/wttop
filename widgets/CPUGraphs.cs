@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
@@ -9,18 +8,22 @@ using wttop.Helpers;
 
 namespace wttop.Widgets {
     
-    public class CPUGraphs : Widget {
-        
+    public class CPUGraphs : Widget
+    {    
         Label[] cpus;
+        
         Bar[] bars;
+        
         ISystemInfo systemInfo;
 
-        public CPUGraphs(string text, IServiceProvider serviceProvider) : base(text){
+        public CPUGraphs(string text, IServiceProvider serviceProvider) : base(text)
+        {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             DrawWidget();
         }
 
-        void DrawWidget(){
+        void DrawWidget()
+        {
             var maxCpusCount = systemInfo.GetCPUsCount();
             
             cpus = new Label[maxCpusCount];
@@ -35,7 +38,7 @@ namespace wttop.Widgets {
                     };
 
                 bars[i] = 
-                    new Bar(){
+                    new Bar(Color.Black, Color.White){
                         X = offsetX + 7,
                         Y = offsetY,
                         Width = Dim.Sized(20),
@@ -48,6 +51,7 @@ namespace wttop.Widgets {
             Add(cpus);
             Add(bars);
         }
+
         public override bool Update(MainLoop MainLoop)
         {
             var cpusUsage = systemInfo.GetCPUsUsage();

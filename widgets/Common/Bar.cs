@@ -1,30 +1,39 @@
-using System;
 using Terminal.Gui;
 
-namespace wttop.Widgets.Common {
+namespace wttop.Widgets.Common
+{
 
-    public class Bar : Component {
+    public class Bar : Component<float>
+    {
+        
+        ProgressBar progressBar;
+        
+        public Bar(Color Foreground, Color Background)
+        {
+            DrawFrame(this.Bounds, 0, false);
 
-        Label barFilling;
-        Char barIndicator = 'I';
-        Terminal.Gui.Attribute textColor = Terminal.Gui.Attribute.Make(Color.Black, Color.Gray);
-
-        public Bar() {
-            DrawFrame(this.Bounds, 0, true);
-
-            barFilling = new Label(string.Empty) {
+            progressBar = new ProgressBar() {
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill()
             };
-            barFilling.TextColor = textColor;
-            Add(barFilling);
+
+            var colorAttributes = Terminal.Gui.Attribute.Make(Foreground, Background);
+            var colorSchema = new ColorScheme();
+            colorSchema.Normal = colorAttributes;
+            colorSchema.HotNormal = colorAttributes;
+            colorSchema.HotFocus = colorAttributes;
+            colorSchema.Focus = colorAttributes;            
+            progressBar.ColorScheme = colorSchema;
+            
+            Add(progressBar);
         }
 
-        protected override void UpdateAction(object newValue){
-            var nbDot = (int)Math.Floor((decimal)((int)newValue / 5)); // Because it's 20 the widht, dirty, need to be changed
-            barFilling.Text = String.Empty.PadLeft(nbDot, barIndicator);
+        protected override void UpdateAction(float newValue)
+        {
+           // Value are between 0 and 1, hence the division
+           progressBar.Fraction = newValue / 100;
         }
     }
 }

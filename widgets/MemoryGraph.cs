@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using wttop.Widgets.Common;
@@ -9,26 +7,30 @@ using wttop.Helpers;
 
 namespace wttop.Widgets {
     
-    public class MemoryGraph : Widget {
-        
+    public class MemoryGraph : Widget
+    { 
         Label details;
+        
         Bar bar;
+        
         ISystemInfo systemInfo;
 
-        public MemoryGraph(string text, IServiceProvider serviceProvider) : base(text){
+        public MemoryGraph(string text, IServiceProvider serviceProvider) : base(text)
+        {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             DrawWidget();
         }
 
-        void DrawWidget(){
-            
-            Label lbl = new Label("Memory usage")
+        void DrawWidget()
+        {
+            Label title = new Label("Memory usage")
             {
                 X = 1,
                 Y = 1
             };
             
-            bar = new Bar(){
+            bar = new Bar(Color.Black, Color.White)
+            {
                 X = 14,
                 Y = 1,
                 Width = Dim.Sized(20),
@@ -41,7 +43,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(bar)
             };
            
-            Add(lbl);
+            Add(title);
             Add(bar);
             Add(details);
         }
@@ -49,7 +51,7 @@ namespace wttop.Widgets {
         {
             var memoryUsage = systemInfo.GetMemoryUsage();
             bar.Update(MainLoop, memoryUsage.PercentageUsed);
-            details.Text = $"{memoryUsage.UsedGB} Gb / {memoryUsage.TotalGB} Gb used";
+            details.Text = $"{memoryUsage.AvailableGB} Gb avail.";
             return true;
         }
     }

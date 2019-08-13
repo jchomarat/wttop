@@ -18,7 +18,8 @@ namespace wttop
             var top = Application.Top;
 
             // Creates the top-level window to show
-            var win = new Window("wttop") {
+            var win = new Window("wttop")
+            {
                 X = 0,
                 Y = 0,
 
@@ -27,7 +28,8 @@ namespace wttop
             };
             top.Add (win);
 
-            var cpuGraphs = new CPUGraphs("CPU", serviceProvider) {
+            var cpuGraphs = new CPUGraphs("CPU", serviceProvider)
+            {
                 X = 0,
                 Y = 0,
                 Width = Dim.Percent(50),
@@ -36,14 +38,15 @@ namespace wttop
             
             win.Add(cpuGraphs);
 
-            var memoryGraph = new MemoryGraph("Memory", serviceProvider) {
+            var memoryGraph = new MemoryGraph("Memory", serviceProvider) 
+            {
                 X = Pos.Right(cpuGraphs),
                 Y = 0,
                 Width = Dim.Fill(),
                 Height= Dim.Percent(40)
             };
 
-            win.Add(memoryGraph);
+            win.Add(memoryGraph); 
 
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
