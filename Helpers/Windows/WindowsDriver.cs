@@ -7,6 +7,11 @@ namespace wttop.Helpers
     {
         WMIWrapper wmi;
 
+        public OSInfo GetOSInfo()
+        {
+            return wmi.GetOperatingSystemInformation();
+        }
+
         public WindowsDriver()
         {
             wmi = new WMIWrapper();
@@ -36,6 +41,27 @@ namespace wttop.Helpers
                 TotalKb = memoryInfo.Item1,
                 AvailableKb = memoryInfo.Item2
             };
+        }
+
+        public Network GetNetworkStatistics()
+        {
+            var network = new Network();
+            network.Interfaces = wmi.GetNetworkInterfacesDetails().ToList();
+            return network;
+        }
+
+        public Process GetProcessActivity()
+        {
+            var process = new Process();
+            process.Processes = wmi.GetProcessesActivity().ToList();
+            return process;
+        }
+
+        public Disk GetDiskActivity()
+        {
+            var disk = new Disk();
+            disk.Disks = wmi.GetAllDisksActivity().ToList();
+            return disk;
         }
     }
 }

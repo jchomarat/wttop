@@ -2,6 +2,7 @@
 using Terminal.Gui;
 using Microsoft.Extensions.DependencyInjection;
 using wttop.Widgets;
+using wttop.Widgets.Common;
 using wttop.Helpers;
 
 namespace wttop
@@ -48,10 +49,21 @@ namespace wttop
 
             win.Add(memoryGraph); 
 
+            Indicator ind = new Indicator(Color.White, Color.White, Color.Green, Color.Green)
+            {
+                X = 30,
+                Y = 20,
+                Width = Dim.Sized(2),
+                Height= Dim.Sized(1)
+            };
+            
+            win.Add(ind);
+
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
                 cpuGraphs.Update(MainLoop);
                 memoryGraph.Update(MainLoop);
+                ind.Update(MainLoop, "");
                 return true;
             });
 

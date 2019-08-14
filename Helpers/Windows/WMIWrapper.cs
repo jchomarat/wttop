@@ -5,8 +5,8 @@ using System.Management;
 
 namespace wttop.Helpers {
 
-    public class WMIWrapper {
-        
+    public class WMIWrapper
+    {  
         ManagementObjectCollection runQuery(string queryString)
         {
             var query = new System.Management.ObjectQuery(queryString);
@@ -14,9 +14,23 @@ namespace wttop.Helpers {
             return searcher.Get();
         }
 
+        public OSInfo GetOperatingSystemInformation()
+        {
+            var queryString = "SELECT caption, CSName, LastBootUpTime FROM Win32_OperatingSystem";
+            var results = runQuery(queryString);
+
+            var item = results.Cast<ManagementObject>().FirstOrDefault();
+            return new OSInfo()
+            {
+                MachineName = item["CSName"].ToString(),
+                OSName = item["caption"].ToString(),
+                UpTime = OSInfo.ParseUpTime(item["LastBootUpTime"].ToString())
+            };
+        }
+
         public IEnumerable<Tuple<string, string>> GetCPUsUsage()
         {
-            var queryString = "SELECT name, PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor where NOT name = '_Total'";
+            var queryString = "SELECT name, PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE NOT name = '_Total'";
             var results = runQuery(queryString);
 
             return results.Cast<ManagementObject>()
@@ -40,6 +54,48 @@ namespace wttop.Helpers {
             var total = Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["TotalVisibleMemorySize"]);
             
             return new Tuple<int, int>(total, available);
+        }
+
+        public IEnumerable<InterfaceDetails> GetNetworkInterfacesDetails()
+        {
+            var queryString = "SELECT BytesReceivedPersec, BytesSentPersec, Name FROM Win32_PerfRawData_Tcpip_NetworkInterface";
+            var results = runQuery(queryString);
+
+            return results.Cast<ManagementObject>()
+                .Select(mo => new InterfaceDetails(){
+                    Name = mo["Name"].ToString(),
+                    BytesReceived = Convert.ToInt32(mo["BytesReceivedPersec"]),
+                    BytesSent = Convert.ToInt32(mo["BytesSentPersec"])
+                });
+        }
+
+        public IEnumerable<ProcessInfo> GetProcessesActivity()
+        {
+            var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
+            var results = runQuery(queryString);
+
+            return results.Cast<ManagementObject>()
+                .Select(mo => new ProcessInfo(){
+                    Name = mo["Name"].ToString(),
+                    PercentProcessorTime = Convert.ToInt32(mo["PercentProcessorTime"]),
+                    IDProcess = Convert.ToInt32(mo["IDProcess"]),
+                    ThreadCount = Convert.ToInt32(mo["ThreadCount"]),
+                    HandleCOunt = Convert.ToInt32(mo["HandleCOunt"]),
+                    PriorityBase = Convert.ToInt32(mo["PriorityBase"])
+                });
+        }
+
+        public IEnumerable<DiskDetails> GetAllDisksActivity()
+        {
+            var queryString = "SELECT DiskReadBytesPersec, DiskWriteBytesPersec, Name FROM Win32_PerfRawData_PerfDisk_PhysicalDisk WHERE NOT name = '_Total'";
+            var results = runQuery(queryString);
+
+            return results.Cast<ManagementObject>()
+                .Select(mo => new DiskDetails(){
+                    Name = mo["Name"].ToString(),
+                    BytesRead = Convert.ToInt32(mo["DiskReadBytesPersec"]),
+                    BytesWrite = Convert.ToInt32(mo["DiskWriteBytesPersec"])
+                });
         }
     }
 }
