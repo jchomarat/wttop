@@ -28,20 +28,19 @@ namespace wttop.Widgets {
             
             cpus = new Label[maxCpusCount];
             bars = new Bar[maxCpusCount];
-            var offsetX = 1;
             var offsetY = 1;
             for (var i = 0; i < maxCpusCount; i++)
             {    
-                cpus[i] = new Label($"cpu-{i}") {
-                        X = offsetX,
+                cpus[i] = new Label($"cpu-{i}: ") {
+                        X = 1,
                         Y = offsetY
                     };
 
                 bars[i] = 
-                    new Bar(Color.Black, Color.White){
-                        X = offsetX + 7,
+                    new Bar(Color.Blue, Color.DarkGray){
+                        X = Pos.Right(cpus[i]),
                         Y = offsetY,
-                        Width = Dim.Sized(20),
+                        Width = Dim.Percent(75),
                         Height= Dim.Sized(1)
                     };
 

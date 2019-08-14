@@ -23,17 +23,17 @@ namespace wttop.Widgets {
 
         void DrawWidget()
         {
-            Label title = new Label("Memory usage")
+            Label title = new Label("Memory usage: ")
             {
                 X = 1,
                 Y = 1
             };
             
-            bar = new Bar(Color.Black, Color.White)
+            bar = new Bar(Color.Red, Color.DarkGray)
             {
-                X = 14,
+                X = Pos.Right(title),
                 Y = 1,
-                Width = Dim.Sized(20),
+                Width = Dim.Percent(30),
                 Height= Dim.Sized(1)
             };
 
@@ -51,7 +51,7 @@ namespace wttop.Widgets {
         {
             var memoryUsage = systemInfo.GetMemoryUsage();
             bar.Update(MainLoop, memoryUsage.PercentageUsed);
-            details.Text = $"{memoryUsage.AvailableGB} Gb avail.";
+            details.Text = $"{memoryUsage.AvailableGB} GB available";
             return true;
         }
     }

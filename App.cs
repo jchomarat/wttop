@@ -18,6 +18,14 @@ namespace wttop
             Application.Init();
             var top = Application.Top;
 
+            // Main color schema
+            var mainColorScheme = new ColorScheme();
+            var mainColorAttributes = Terminal.Gui.Attribute.Make(Color.White, Color.Black);
+            mainColorScheme.Focus = mainColorAttributes;
+            mainColorScheme.HotFocus = mainColorAttributes;
+            mainColorScheme.HotNormal = mainColorAttributes;
+            mainColorScheme.Normal = mainColorAttributes;
+
             // Creates the top-level window to show
             var win = new Window("wttop")
             {
@@ -27,9 +35,10 @@ namespace wttop
                 Width = Dim.Fill(),
                 Height = Dim.Fill()
             };
+            win.ColorScheme = mainColorScheme;
             top.Add (win);
 
-            var cpuGraphs = new CPUGraphs("CPU", serviceProvider)
+            var viewTopLeft = new CPUGraphs("CPU", serviceProvider)
             {
                 X = 0,
                 Y = 0,
@@ -37,33 +46,42 @@ namespace wttop
                 Height= Dim.Percent(40)
             };
             
-            win.Add(cpuGraphs);
+            win.Add(viewTopLeft);
 
-            var memoryGraph = new MemoryGraph("Memory", serviceProvider) 
+            var viewTopRight = new View()
             {
-                X = Pos.Right(cpuGraphs),
+                X = Pos.Right(viewTopLeft),
                 Y = 0,
                 Width = Dim.Fill(),
                 Height= Dim.Percent(40)
             };
 
-            win.Add(memoryGraph); 
+            win.Add(viewTopRight);
 
-            Indicator ind = new Indicator(Color.White, Color.White, Color.Green, Color.Green)
+            var memoryGraph = new MemoryGraph("Memory", serviceProvider) 
             {
-                X = 30,
-                Y = 20,
-                Width = Dim.Sized(2),
-                Height= Dim.Sized(1)
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height= Dim.Percent(33)
             };
-            
-            win.Add(ind);
+
+            var networkGraph = new NetworkGraph("Network activity", serviceProvider)
+            {
+                X = 0,
+                Y = Pos.Bottom(memoryGraph),
+                Width = Dim.Fill(),
+                Height= Dim.Fill()
+            };
+
+            viewTopRight.Add(memoryGraph); 
+            viewTopRight.Add(networkGraph); 
 
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
-                cpuGraphs.Update(MainLoop);
+                viewTopLeft.Update(MainLoop);
                 memoryGraph.Update(MainLoop);
-                ind.Update(MainLoop, "");
+                networkGraph.Update(MainLoop);
                 return true;
             });
 
