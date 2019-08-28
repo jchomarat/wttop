@@ -38,12 +38,22 @@ namespace wttop
             win.ColorScheme = mainColorScheme;
             top.Add (win);
 
-            var viewTopLeft = new CPUGraphs("CPU", serviceProvider)
+            var osInfo = new InfoText(serviceProvider)
             {
                 X = 0,
                 Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Sized(3)
+            };
+
+            win.Add(osInfo);
+
+            var viewTopLeft = new CPUGraphs("CPU", serviceProvider)
+            {
+                X = 0,
+                Y = Pos.Bottom(osInfo),
                 Width = Dim.Percent(50),
-                Height= Dim.Percent(40)
+                Height= Dim.Sized(20)
             };
             
             win.Add(viewTopLeft);
@@ -51,9 +61,9 @@ namespace wttop
             var viewTopRight = new View()
             {
                 X = Pos.Right(viewTopLeft),
-                Y = 0,
+                Y = Pos.Bottom(osInfo),
                 Width = Dim.Fill(),
-                Height= Dim.Percent(40)
+                Height= Dim.Sized(20)
             };
 
             win.Add(viewTopRight);
@@ -79,6 +89,7 @@ namespace wttop
 
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
+                osInfo.Update(MainLoop);
                 viewTopLeft.Update(MainLoop);
                 memoryGraph.Update(MainLoop);
                 networkGraph.Update(MainLoop);
