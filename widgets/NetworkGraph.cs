@@ -29,7 +29,7 @@ namespace wttop.Widgets {
             Label titleDl = new Label("Download (B/sec): ")
             {
                 X = 1,
-                Y = 1
+                Y = 2
             };
 
             Add(titleDl);
@@ -37,7 +37,7 @@ namespace wttop.Widgets {
             dl = new Label(string.Empty)
             {
                 X = Pos.Right(titleDl),
-                Y = 1
+                Y = 2
             };
            
             Add(dl);

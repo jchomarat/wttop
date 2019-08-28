@@ -26,13 +26,13 @@ namespace wttop.Widgets {
             Label title = new Label("Memory usage: ")
             {
                 X = 1,
-                Y = 1
+                Y = 2
             };
             
             bar = new Bar(Color.Red, Color.DarkGray)
             {
                 X = Pos.Right(title),
-                Y = 1,
+                Y = 2,
                 Width = Dim.Percent(30),
                 Height= Dim.Sized(1)
             };
@@ -47,6 +47,7 @@ namespace wttop.Widgets {
             Add(bar);
             Add(details);
         }
+        
         public override bool Update(MainLoop MainLoop)
         {
             var memoryUsage = systemInfo.GetMemoryUsage();

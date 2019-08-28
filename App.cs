@@ -53,7 +53,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(20)
+                Height= Dim.Sized(21)
             };
             
             win.Add(viewTopLeft);
@@ -63,7 +63,7 @@ namespace wttop
                 X = Pos.Right(viewTopLeft),
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(20)
+                Height= Dim.Sized(21)
             };
 
             win.Add(viewTopRight);
@@ -73,7 +73,7 @@ namespace wttop
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height= Dim.Percent(33)
+                Height= Dim.Sized(7)
             };
 
             var networkGraph = new NetworkGraph("Network activity", serviceProvider)
@@ -81,11 +81,30 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(memoryGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Fill()
+                Height= Dim.Sized(7)
+            };
+
+            var diskGraph = new DiskGraph("Disk activity", serviceProvider)
+            {
+                X = 0,
+                Y = Pos.Bottom(networkGraph),
+                Width = Dim.Fill(),
+                Height= Dim.Sized(7)
             };
 
             viewTopRight.Add(memoryGraph); 
-            viewTopRight.Add(networkGraph); 
+            viewTopRight.Add(networkGraph);
+            viewTopRight.Add(diskGraph);
+
+            var processList = new ProcessList("Processes list", serviceProvider)
+            {
+                X = 0,
+                Y = Pos.Bottom(viewTopLeft),
+                Width = Dim.Fill(),
+                Height= Dim.Fill()
+            };
+
+            win.Add(processList);
 
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
@@ -93,6 +112,7 @@ namespace wttop
                 viewTopLeft.Update(MainLoop);
                 memoryGraph.Update(MainLoop);
                 networkGraph.Update(MainLoop);
+                diskGraph.Update(MainLoop);
                 return true;
             });
 
