@@ -93,8 +93,8 @@ namespace wttop.Helpers {
             return results.Cast<ManagementObject>()
                 .Select(mo => new DiskDetails(){
                     Name = mo["Name"].ToString(),
-                    BytesRead = Convert.ToInt32(mo["DiskReadBytesPersec"]),
-                    BytesWrite = Convert.ToInt32(mo["DiskWriteBytesPersec"])
+                    BytesRead = Convert.ToInt64(mo["DiskReadBytesPersec"]),
+                    BytesWrite = Convert.ToInt64(mo["DiskWriteBytesPersec"])
                 });
         }
     }

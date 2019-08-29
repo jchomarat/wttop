@@ -10,6 +10,7 @@ namespace wttop.Widgets {
     public class NetworkGraph : Widget
     { 
         Label upl;
+        
         Label dl;
         
         ISystemInfo systemInfo;
@@ -76,11 +77,11 @@ namespace wttop.Widgets {
             else
             {
                 var i = ((network.TotalBytesSent - valueUpl)/100);
-                upl.Text = $"{i}   ";
+                upl.Text = $"{i}             ";
                 valueUpl = network.TotalBytesSent;
 
                 var j = ((network.TotalBytesReceived - valueDl)/100);
-                dl.Text = $"{j}   ";
+                dl.Text = $"{j}              ";
                 valueDl = network.TotalBytesReceived;
             }
             return true;

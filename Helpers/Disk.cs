@@ -8,9 +8,9 @@ namespace wttop.Helpers {
     {
         public string Name {get; set; }
 
-        public int BytesRead {get; set; }
+        public long BytesRead {get; set; }
        
-        public int BytesWrite {get; set; }
+        public long BytesWrite {get; set; }
     }
 
     public class Disk
@@ -29,7 +29,7 @@ namespace wttop.Helpers {
             }
         }
         
-        public int TotalBytesWritten
+        public long TotalBytesWritten
         {
             get 
             {
@@ -37,7 +37,7 @@ namespace wttop.Helpers {
             }
         }
        
-        public int TotalBytesRead
+        public long TotalBytesRead
         {
             get 
             {
