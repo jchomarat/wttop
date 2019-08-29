@@ -54,7 +54,7 @@ namespace wttop.Widgets.Common
 
         protected override void UpdateAction(float newValue)
         {
-           percentText.Text = $" {newValue} %";
+           percentText.Text = $" {newValue} %   ";
            // Get the label that acts as progress bar width, to calculate how many | to write
            var lblWidth = percentBar.Bounds.Width;
            int charCount = (int)Math.Floor((newValue*lblWidth)/100);

@@ -26,7 +26,7 @@ namespace wttop.Widgets {
 
         void DrawWidget()
         {
-            Label titleDl = new Label("Download (B/sec): ")
+            Label titleDl = new Label("Download (kB/sec): ")
             {
                 X = 1,
                 Y = 2
@@ -39,10 +39,12 @@ namespace wttop.Widgets {
                 X = Pos.Right(titleDl),
                 Y = 2
             };
+
+            dl.TextColor = Terminal.Gui.Attribute.Make(Color.Green, Color.Black);
            
             Add(dl);
 
-            Label titleUpl = new Label("Upload (B/sec): ")
+            Label titleUpl = new Label("Upload (kB/sec): ")
             {
                 X = 1,
                 Y = Pos.Bottom(titleDl)
@@ -55,6 +57,8 @@ namespace wttop.Widgets {
                 X = Pos.Right(dl),
                 Y = Pos.Bottom(dl)
             };
+
+            upl.TextColor = Terminal.Gui.Attribute.Make(Color.Red, Color.Black);
 
             Add(upl);
 
@@ -71,10 +75,12 @@ namespace wttop.Widgets {
             }
             else
             {
-                upl.Text = (network.TotalBytesSent - valueUpl).ToString();
+                var i = ((network.TotalBytesSent - valueUpl)/100);
+                upl.Text = $"{i}   ";
                 valueUpl = network.TotalBytesSent;
 
-                dl.Text = (network.TotalBytesReceived - valueDl).ToString();
+                var j = ((network.TotalBytesReceived - valueDl)/100);
+                dl.Text = $"{j}   ";
                 valueDl = network.TotalBytesReceived;
             }
             return true;
