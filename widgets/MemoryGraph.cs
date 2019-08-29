@@ -11,7 +11,7 @@ namespace wttop.Widgets {
     { 
         Label details;
         
-        Bar bar;
+        Bar2 bar;
         
         ISystemInfo systemInfo;
 
@@ -29,7 +29,7 @@ namespace wttop.Widgets {
                 Y = 2
             };
             
-            bar = new Bar(Color.Red, Color.DarkGray)
+            bar = new Bar2(Color.Red)
             {
                 X = Pos.Right(title),
                 Y = 2,

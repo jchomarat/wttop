@@ -3,6 +3,7 @@ using Terminal.Gui;
 namespace wttop.Widgets.Common
 {
 
+    // Bar chart implementation using framework native progress bar
     public class Bar : Component<float>
     {
         
