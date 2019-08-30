@@ -15,9 +15,9 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
-        int valueUpl = 0;
+        long valueUpl = 0;
         
-        int valueDl = 0;
+        long valueDl = 0;
 
         public NetworkGraph(string text, IServiceProvider serviceProvider) : base(text)
         {

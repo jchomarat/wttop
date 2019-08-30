@@ -6,8 +6,7 @@ namespace wttop.Widgets.Common
 
     // Bar chart implementation using Labels and '|' char
     public class Bar2 : Component<float>
-    {
-        
+    {      
         Label percentText;
 
         Label percentBar;

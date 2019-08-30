@@ -64,8 +64,8 @@ namespace wttop.Helpers {
             return results.Cast<ManagementObject>()
                 .Select(mo => new InterfaceDetails(){
                     Name = mo["Name"].ToString(),
-                    BytesReceived = Convert.ToInt32(mo["BytesReceivedPersec"]),
-                    BytesSent = Convert.ToInt32(mo["BytesSentPersec"])
+                    BytesReceived = Convert.ToInt64(mo["BytesReceivedPersec"]),
+                    BytesSent = Convert.ToInt64(mo["BytesSentPersec"])
                 });
         }
 
@@ -80,7 +80,7 @@ namespace wttop.Helpers {
                     PercentProcessorTime = Convert.ToInt32(mo["PercentProcessorTime"]),
                     IDProcess = Convert.ToInt32(mo["IDProcess"]),
                     ThreadCount = Convert.ToInt32(mo["ThreadCount"]),
-                    HandleCOunt = Convert.ToInt32(mo["HandleCOunt"]),
+                    HandleCount = Convert.ToInt32(mo["HandleCOunt"]),
                     PriorityBase = Convert.ToInt32(mo["PriorityBase"])
                 });
         }

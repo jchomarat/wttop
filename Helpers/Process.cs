@@ -14,7 +14,7 @@ namespace wttop.Helpers {
 
         public int ThreadCount {get; set; }
 
-        public int HandleCOunt {get; set; }
+        public int HandleCount {get; set; }
 
         public int PriorityBase {get; set; }
     }

@@ -8,9 +8,9 @@ namespace wttop.Helpers {
     {
         public string Name {get; set; }
 
-        public int BytesReceived {get; set; }
+        public long BytesReceived {get; set; }
        
-        public int BytesSent {get; set; }
+        public long BytesSent {get; set; }
     }
 
     public class Network
@@ -29,7 +29,7 @@ namespace wttop.Helpers {
             }
         }
         
-        public int TotalBytesReceived
+        public long TotalBytesReceived
         {
             get 
             {
@@ -37,7 +37,7 @@ namespace wttop.Helpers {
             }
         }
        
-        public int TotalBytesSent
+        public long TotalBytesSent
         {
             get 
             {

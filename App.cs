@@ -113,6 +113,7 @@ namespace wttop
                 memoryGraph.Update(MainLoop);
                 networkGraph.Update(MainLoop);
                 diskGraph.Update(MainLoop);
+                processList.Update(MainLoop);
                 return true;
             });
 
