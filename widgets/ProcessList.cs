@@ -13,6 +13,8 @@ namespace wttop.Widgets {
     public class ProcessList : Widget
     { 
         Grid grid;
+
+        ProcessListDataSourceBuilder dataSource;
         
         ISystemInfo systemInfo;
 
@@ -24,10 +26,8 @@ namespace wttop.Widgets {
 
         void DrawWidget()
         {
-            
-            string[] headers = new string[] {"Name", "IDProcess", "PercentProcessorTime", "ThreadCount", "HandleCount", "PriorityBase"};
-            decimal[] colWidth = new decimal[] {0.25m, 0.15m, 0.15m, 0.15m, 0.15m, 0.15m};
-            grid = new Grid(headers, colWidth)
+            dataSource = new ProcessListDataSourceBuilder();
+            grid = new Grid(dataSource)
             {
                 X = 0,
                 Y = 0,
@@ -41,14 +41,12 @@ namespace wttop.Widgets {
         public override bool Update(MainLoop MainLoop)
         {
             var processList = systemInfo.GetProcessActivity();
-            var dataSource = new ProcessListDataSource(processList.GetTop10.ToList());
-            
-            grid.Update(MainLoop, dataSource);
+            grid.Update(MainLoop, processList.GetTop10.ToList());
             return true;
         }
     }
 
-    public class ProcessListDataSource: GridDataSource
+    public class ProcessListDataSourceBuilder: GridDataSourceBuilder
     {
         IList dataSource;
 
@@ -58,13 +56,35 @@ namespace wttop.Widgets {
             set {dataSource = value;}
         }
 
-        public ProcessListDataSource(IList src)
+        public string[] GetHeader()
         {
-            dataSource = src;
+            return new string[] {
+                "Name", 
+                "IDProcess", 
+                "PercentProcessorTime", 
+                "ThreadCount", 
+                "HandleCount", 
+                "PriorityBase"
+            };
         }
 
-        public string[] GetRowFromObject(int index)
+        public decimal[] GetColumnsWidth()
         {
+            return  new decimal[] {
+                0.25m, 
+                0.15m, 
+                0.15m, 
+                0.15m, 
+                0.15m,
+                0.15m
+            };
+        }
+
+        public string[] GetRowData(int index)
+        {
+            if (dataSource == null)
+                throw new ArgumentException("You need to set the IList data source");
+
             ProcessInfo p = dataSource[index] as ProcessInfo;
             
             return new string[] {

@@ -6,18 +6,16 @@ using NStack;
 
 namespace wttop.Widgets.Common
 {
-    public class Grid : Component<GridDataSource>
+    public class Grid : Component<IList>
     {
-        string[] header;
-
-        decimal[] columnsRatio;
+        GridDataSourceBuilder dataSourceBuilder;
 
         int y = 1;
 
-        public Grid(string[] Header, decimal[] ColumnsRatio)
+        public Grid(GridDataSourceBuilder DataSourceBuilder)
         {
-            columnsRatio = ColumnsRatio;
-            header = Header;
+            dataSourceBuilder = DataSourceBuilder;
+
             DrawFrame(this.Bounds, 0, false);
 
             var mainColorScheme = new ColorScheme();
@@ -35,10 +33,10 @@ namespace wttop.Widgets.Common
             //Generate header
             int y = 1;
             int x = 1;
-            for(int i = 0; i < header.Length; i++)
+            for(int i = 0; i < dataSourceBuilder.GetHeader().Length; i++)
             {
-                int width = (int)Math.Floor(this.Bounds.Width*columnsRatio[i]);
-                WriteText(x, y, width, header[i]);
+                int width = (int)Math.Floor(this.Bounds.Width*dataSourceBuilder.GetColumnsWidth()[i]);
+                WriteText(x, y, width, dataSourceBuilder.GetHeader()[i]);
                 y += width;                
             };
         }
@@ -60,18 +58,20 @@ namespace wttop.Widgets.Common
             }
         }
 
-        protected override void UpdateAction(GridDataSource newValue)
+        protected override void UpdateAction(IList newListItems)
         {
+            dataSourceBuilder.DataSource = newListItems;
+
             // Ensure color schema is correct
-            for(int i = 0; i < newValue.DataSource.Count; i ++)
+            for(int i = 0; i < dataSourceBuilder.DataSource.Count; i ++)
             {
-                var row = newValue.GetRowFromObject(i);
+                var row = dataSourceBuilder.GetRowData(i);
                 int x = i + 2;
                 int y = 1;
                 
                 for(int j = 0; j < row.Length; j++)
                 {
-                    int width = (int)Math.Floor(this.Bounds.Width*columnsRatio[j]);
+                    int width = (int)Math.Floor(this.Bounds.Width*dataSourceBuilder.GetColumnsWidth()[j]);
                     WriteText(x, y, width, row[j]);
                     y += width;
                 };
@@ -79,10 +79,14 @@ namespace wttop.Widgets.Common
         }
     }
 
-    public interface GridDataSource
+    public interface GridDataSourceBuilder
     {
         IList DataSource {get; set;}
 
-        string[] GetRowFromObject(int index);
+        string[] GetHeader();
+
+        decimal[] GetColumnsWidth();
+
+        string[] GetRowData(int index);
     }
 }
