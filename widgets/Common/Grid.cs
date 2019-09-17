@@ -71,6 +71,7 @@ namespace wttop.Widgets.Common
             }
 
             // Draw footer
+            Driver.SetAttribute(dataSourceBuilder.FooterStyle);
             WriteText(x + 2, 1, 50, dataSourceBuilder.GetFooter());
         }
     }
