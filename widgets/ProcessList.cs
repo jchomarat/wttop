@@ -41,7 +41,9 @@ namespace wttop.Widgets {
         public override bool Update(MainLoop MainLoop)
         {
             var processList = systemInfo.GetProcessActivity();
-            grid.Update(MainLoop, processList.GetTop10.ToList());
+            dataSource.TotalProcessesCount = processList.Processes.Count();
+            
+            grid.Update(MainLoop, processList.GetTop20.ToList());
             return true;
         }
     }
@@ -56,16 +58,30 @@ namespace wttop.Widgets {
             set {dataSource = value;}
         }
 
+        public int TotalProcessesCount
+        {
+            get;
+            set;
+        }
+
         public string[] GetHeader()
         {
             return new string[] {
                 "Name", 
-                "IDProcess", 
-                "PercentProcessorTime", 
+                "ID", 
+                "CPU%", 
                 "ThreadCount", 
                 "HandleCount", 
-                "PriorityBase"
+                "Priority"
             };
+        }
+
+        public Terminal.Gui.Attribute HeaderStyle
+        {
+            get
+            {
+                return Terminal.Gui.Attribute.Make(Color.White, Color.DarkGray);
+            }
         }
 
         public decimal[] GetColumnsWidth()
@@ -95,6 +111,19 @@ namespace wttop.Widgets {
                 p.HandleCount.ToString(),
                 p.PriorityBase.ToString()
             };
+        }
+
+        public string GetFooter()
+        {
+            return $"{TotalProcessesCount} running processes";
+        }
+
+        public Terminal.Gui.Attribute FooterStyle
+        {
+            get
+            {
+                return Terminal.Gui.Attribute.Make(Color.White, Color.Black);
+            }
         }
     }
 }
