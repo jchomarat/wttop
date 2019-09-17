@@ -18,12 +18,12 @@ namespace wttop.Core {
 
         public long MemoryUsageB {get; set; }
 
-        public decimal MemoryUsageMB
+        public double MemoryUsageMB
         {
             get
             {
-                decimal d = MemoryUsageB/1024/1024;
-                return Math.Round(d, 2);
+                double d = MemoryUsageB/1024.0/1024.0;
+                return Math.Round(d, 1);
             }
         }
 
