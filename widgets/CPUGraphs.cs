@@ -18,14 +18,17 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
-        public Color BarColor { get; set; } = Color.Green;
+        Settings settings;
 
         public CPUGraphs(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+
+            DrawWidget();
         }
 
-        public override void Init()
+        void DrawWidget()
         {
             var maxCpusCount = systemInfo.GetCPUsCount();
             
@@ -40,7 +43,7 @@ namespace wttop.Widgets {
                     };
 
                 bars[i] = 
-                    new Bar(BarColor, Settings.MainBackgroundColor){
+                    new Bar(settings.CPUBarColor, settings.MainBackgroundColor){
                         X = Pos.Right(cpus[i]),
                         Y = offsetY,
                         Width = Dim.Percent(75),

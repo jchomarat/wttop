@@ -4,58 +4,82 @@ namespace wttop
 {
     public class Settings
     {
+        # region Main app
+
         // Main app title
-        public static string MainAppTitle = "wttop";
+        public string MainAppTitle {get; set; } = "wttop";
 
-        // CPU widget title
-        public static string CPUWidgetTitle = "CPU";
-
-        // Memory widget title
-        public static string MemoryWidgetTitle = "Memory";
-
-        // Network widget title
-        public static string NetworkWidgetTitle = "Network activity";
-
-        // Disk widget title
-        public static string DiskWidgetTitle = "Disk activity";
-
-        // Processes list widget title (it is only the top 20)
-        public static string ProcessesListWidgetTitle = "Processes list (top 20)";
-       
-        // Main text color throughout the entire app.
-        public static Color MainForegroundColor = Color.White;
+         // Main text color throughout the entire app.
+        public Color MainForegroundColor {get; set; } = Color.White;
 
         // Main background color throughtout the enture app.
-        public static Color MainBackgroundColor = Color.Black;
+        public Color MainBackgroundColor {get; set; } = Color.Black;
+
+        # endregion
+        
+        # region CPU Widget
+
+        // CPU widget title
+        public string CPUWidgetTitle {get; set; }= "CPU";
 
         // Color of the CPU graph bar
-        public static Color CPUBarColor = Color.Green;
+        public Color CPUBarColor {get; set; } = Color.Green;
+
+        # endregion
+
+        # region Memory widget
+
+        // Memory widget title
+        public string MemoryWidgetTitle {get; set; } = "Memory";
 
         // Color of the memory graph bar
-        public static Color MemoryBarColor = Color.Brown;
+        public Color MemoryBarColor {get; set; } = Color.Brown;
+
+        # endregion
+
+        # region Network widget
+
+        // Network widget title
+        public string NetworkWidgetTitle {get; set; } = "Network activity";
 
         // Color of the network download value text
-        public static Color NetworkDownloadTextColor = Color.Green;
+        public Color NetworkDownloadTextColor {get; set;} = Color.Green;
 
         // Color of the network upload value text
-        public static Color NetworkUploadTextColor = Color.Brown;
+        public Color NetworkUploadTextColor {get; set; } = Color.Brown;
+
+        # endregion        
+
+        # region Disk widget
+
+        // Disk widget title
+        public string DiskWidgetTitle {get; set; } = "Disk activity";
 
         // Color of the disk read value text
-        public static Color DiskReadTextColor = Color.Green;
+        public Color DiskReadTextColor {get; set; } = Color.Green;
 
         // Color of the disk write value text
-        public static Color DiskWriteTextColor = Color.Brown;
+        public Color DiskWriteTextColor {get; set; } = Color.Brown;
+
+        # endregion
+
+        # region Processes list widget
+
+        // Processes list widget title (it is only the top 20)
+        public string ProcessesListWidgetTitle {get; set; } = "Processes list (top 20)";
 
         // Color of the Processes list header text
-        public static Color ProcessesListHeaderTextColor = Color.White;
+        public Color ProcessesListHeaderTextColor {get; set; } = Color.White;
 
         // Color of the processes list header background
-        public static Color ProcessesListHeaderBackgroundColor = Color.DarkGray;
+        public Color ProcessesListHeaderBackgroundColor {get; set; } = Color.DarkGray;
 
         // Color of the Processes list footer text
-        public static Color ProcessesListFooterTextColor = Color.Brown;
+        public Color ProcessesListFooterTextColor {get; set; } = Color.Brown;
 
         // Color of the processes list footer background
-        public static Color ProcessesListFooterBackgroundColor = Color.Black;
+        public Color ProcessesListFooterBackgroundColor {get; set; } = Color.Black;
+
+        # endregion   
     }
 }

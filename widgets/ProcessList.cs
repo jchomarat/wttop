@@ -19,24 +19,21 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
-        public Color HeaderTextColor { get; set; } = Color.White;
-
-        public Color HeaderBackgroundColor { get; set; } = Color.DarkGray;
-
-        public Color FooterTextColor { get; set; } = Color.White;
-
-        public Color FooterBackgroundColor { get; set; } = Color.Black;
+        Settings settings;
 
         public ProcessList(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+
+            DrawWidget();
         }
 
-        public override void Init()
+        void DrawWidget()
         {
             dataSource = new ProcessListDataSourceBuilder();
-            dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(HeaderTextColor, HeaderBackgroundColor);
-            dataSource.FooterStyle = Terminal.Gui.Attribute.Make(FooterTextColor, FooterBackgroundColor);
+            dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListHeaderTextColor, settings.ProcessesListHeaderBackgroundColor);
+            dataSource.FooterStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListFooterTextColor, settings.ProcessesListFooterBackgroundColor);
             grid = new Grid(dataSource)
             {
                 X = 0,

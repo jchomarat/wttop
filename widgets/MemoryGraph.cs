@@ -16,14 +16,17 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
-        public Color BarColor { get; set; } = Color.Red;
+        Settings settings;
 
         public MemoryGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+
+            DrawWidget();
         }
 
-        public override void Init()
+        void DrawWidget()
         {
             Label title = new Label("Memory usage: ")
             {
@@ -31,7 +34,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
             
-            bar = new Bar(BarColor, Settings.MainBackgroundColor)
+            bar = new Bar(settings.MemoryBarColor, settings.MainBackgroundColor)
             {
                 X = Pos.Right(title),
                 Y = 1,

@@ -15,20 +15,21 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        Settings settings;
+
         long valueWrite = 0;
         
         long valueRead = 0;
 
-        public Color WriteTextColor { get; set; } = Color.Red;
-
-        public Color ReadTextColor { get; set; } = Color.Green;
-
         public DiskGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+
+            DrawWidget();
         }
 
-        public override void Init()
+        void DrawWidget()
         {
             Label titleWrite = new Label("Write (kB/sec): ")
             {
@@ -44,7 +45,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
             
-            write.TextColor = Terminal.Gui.Attribute.Make(WriteTextColor, Settings.MainBackgroundColor);
+            write.TextColor = Terminal.Gui.Attribute.Make(settings.DiskWriteTextColor, settings.MainBackgroundColor);
 
             Add(write);            
             
@@ -62,7 +63,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(write)
             };
 
-            read.TextColor = Terminal.Gui.Attribute.Make(ReadTextColor, Settings.MainBackgroundColor);
+            read.TextColor = Terminal.Gui.Attribute.Make(settings.DiskReadTextColor, settings.MainBackgroundColor);
            
             Add(read);
         }

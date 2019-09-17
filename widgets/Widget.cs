@@ -9,8 +9,6 @@ namespace wttop.Widgets {
 
         public Widget(string text) : base(text){}
 
-        public virtual void Init() {}
-
         // Abstract method that each widget will have to implement in order to refresh their content
         public abstract bool Update(MainLoop MainLoop);
     }

@@ -15,20 +15,21 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        Settings settings;
+
         long valueUpl = 0;
         
         long valueDl = 0;
 
-        public Color DownloadTextColor { get; set; } = Color.Green;
-
-        public Color UploadTextColor { get; set; } = Color.Red;
-
         public NetworkGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+
+            DrawWidget();
         }
 
-        public override void Init()
+        void DrawWidget()
         {
             Label titleDl = new Label("Download (kB/sec): ")
             {
@@ -44,7 +45,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
 
-            dl.TextColor = Terminal.Gui.Attribute.Make(DownloadTextColor, Settings.MainBackgroundColor);
+            dl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkDownloadTextColor, settings.MainBackgroundColor);
            
             Add(dl);
 
@@ -62,7 +63,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(dl)
             };
 
-            upl.TextColor = Terminal.Gui.Attribute.Make(UploadTextColor, Settings.MainBackgroundColor);
+            upl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkUploadTextColor, settings.MainBackgroundColor);
 
             Add(upl);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,14 @@ namespace wttop
                 // Other drivers not implemented yet
                 throw new NotImplementedException("This wttop version only supports Windows. Linux & OSX will come.");
             }
+
+            // Add the settings configuration
+            serviceCollection.AddSingleton<Settings>();
+            // Build the provider
             var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            // Get the settings for what can be done here
+            var settings = new Settings();
 
             try
             {
@@ -40,10 +48,10 @@ namespace wttop
 
             // Main color schema
             var mainColorScheme = new ColorScheme();
-            mainColorScheme.SetColorsForAllStates(Settings.MainForegroundColor, Settings.MainBackgroundColor);
+            mainColorScheme.SetColorsForAllStates(settings.MainForegroundColor, settings.MainBackgroundColor);
 
             // Creates the top-level window to show
-            var win = new Window(Settings.MainAppTitle)
+            var win = new Window(settings.MainAppTitle)
             {
                 X = 0,
                 Y = 0,
@@ -64,15 +72,13 @@ namespace wttop
 
             win.Add(osInfo);
 
-            var cpuGraph = new CPUGraphs(Settings.CPUWidgetTitle, serviceProvider)
+            var cpuGraph = new CPUGraphs(settings.CPUWidgetTitle, serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(20),
-                BarColor = Settings.CPUBarColor
+                Height= Dim.Sized(20)
             };
-            cpuGraph.Init();
             
             win.Add(cpuGraph);
 
@@ -86,54 +92,41 @@ namespace wttop
 
             win.Add(viewTopRight);
 
-            var memoryGraph = new MemoryGraph(Settings.MemoryWidgetTitle, serviceProvider) 
+            var memoryGraph = new MemoryGraph(settings.MemoryWidgetTitle, serviceProvider) 
             {
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height= Dim.Sized(6),
-                BarColor = Settings.MemoryBarColor
+                Height= Dim.Sized(6)
             };
-            memoryGraph.Init();
 
-            var networkGraph = new NetworkGraph(Settings.NetworkWidgetTitle, serviceProvider)
+            var networkGraph = new NetworkGraph(settings.NetworkWidgetTitle, serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(memoryGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(7),
-                DownloadTextColor = Settings.NetworkDownloadTextColor,
-                UploadTextColor = Settings.NetworkUploadTextColor
+                Height= Dim.Sized(7)
             };
-            networkGraph.Init();
 
-            var diskGraph = new DiskGraph(Settings.DiskWidgetTitle, serviceProvider)
+            var diskGraph = new DiskGraph(settings.DiskWidgetTitle, serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(networkGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(7),
-                ReadTextColor = Settings.DiskReadTextColor,
-                WriteTextColor = Settings.DiskWriteTextColor
+                Height= Dim.Sized(7)
             };
-            diskGraph.Init();
 
             viewTopRight.Add(memoryGraph); 
             viewTopRight.Add(networkGraph);
             viewTopRight.Add(diskGraph);
 
-            var processList = new ProcessList(Settings.ProcessesListWidgetTitle, serviceProvider)
+            var processList = new ProcessList(settings.ProcessesListWidgetTitle, serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(cpuGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Fill(),
-                HeaderTextColor = Settings.ProcessesListHeaderTextColor,
-                HeaderBackgroundColor = Settings.ProcessesListHeaderBackgroundColor,
-                FooterTextColor = Settings.ProcessesListFooterTextColor,
-                FooterBackgroundColor = Settings.ProcessesListFooterBackgroundColor
+                Height= Dim.Fill()
             };
-            processList.Init();
 
             win.Add(processList);
 
