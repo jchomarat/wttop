@@ -21,11 +21,12 @@ namespace wttop.Widgets {
         
         long valueRead = 0;
 
-        public DiskGraph(string text, IServiceProvider serviceProvider) : base(text)
+        public DiskGraph(IServiceProvider serviceProvider)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
 
+            this.Title = settings.DiskWidgetTitle;
             DrawWidget();
         }
 

@@ -7,7 +7,7 @@ namespace wttop.Widgets {
     // It implements FrameWiew, built in Terminal.Gui to be able to draw on the terminal. FrameView draws a border around the widget
     public abstract class Widget : FrameView {
 
-        public Widget(string text) : base(text){}
+        public Widget() : base(string.Empty){}
 
         // Abstract method that each widget will have to implement in order to refresh their content
         public abstract bool Update(MainLoop MainLoop);

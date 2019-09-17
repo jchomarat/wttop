@@ -72,7 +72,7 @@ namespace wttop
 
             win.Add(osInfo);
 
-            var cpuGraph = new CPUGraphs(settings.CPUWidgetTitle, serviceProvider)
+            var cpuGraph = new CPUGraphs(serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(osInfo),
@@ -92,7 +92,7 @@ namespace wttop
 
             win.Add(viewTopRight);
 
-            var memoryGraph = new MemoryGraph(settings.MemoryWidgetTitle, serviceProvider) 
+            var memoryGraph = new MemoryGraph(serviceProvider) 
             {
                 X = 0,
                 Y = 0,
@@ -100,7 +100,7 @@ namespace wttop
                 Height= Dim.Sized(6)
             };
 
-            var networkGraph = new NetworkGraph(settings.NetworkWidgetTitle, serviceProvider)
+            var networkGraph = new NetworkGraph(serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(memoryGraph),
@@ -108,7 +108,7 @@ namespace wttop
                 Height= Dim.Sized(7)
             };
 
-            var diskGraph = new DiskGraph(settings.DiskWidgetTitle, serviceProvider)
+            var diskGraph = new DiskGraph(serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(networkGraph),
@@ -120,7 +120,7 @@ namespace wttop
             viewTopRight.Add(networkGraph);
             viewTopRight.Add(diskGraph);
 
-            var processList = new ProcessList(settings.ProcessesListWidgetTitle, serviceProvider)
+            var processList = new ProcessList(serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(cpuGraph),

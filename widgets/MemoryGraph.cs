@@ -18,11 +18,12 @@ namespace wttop.Widgets {
 
         Settings settings;
 
-        public MemoryGraph(string text, IServiceProvider serviceProvider) : base(text)
+        public MemoryGraph(IServiceProvider serviceProvider)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
 
+            this.Title = settings.MemoryWidgetTitle;
             DrawWidget();
         }
 

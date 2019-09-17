@@ -21,11 +21,12 @@ namespace wttop.Widgets {
         
         long valueDl = 0;
 
-        public NetworkGraph(string text, IServiceProvider serviceProvider) : base(text)
+        public NetworkGraph(IServiceProvider serviceProvider)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
 
+            this.Title = settings.NetworkWidgetTitle;
             DrawWidget();
         }
 
