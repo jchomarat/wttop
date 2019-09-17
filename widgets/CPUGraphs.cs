@@ -4,10 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop;
+using wttop.Core;
 
 namespace wttop.Widgets {
     
+    // Widght that will display the CPU usage graph
     public class CPUGraphs : Widget
     {    
         Label[] cpus;
@@ -16,13 +18,14 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        public Color BarColor { get; set; } = Color.Green;
+
         public CPUGraphs(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
-            DrawWidget();
         }
 
-        void DrawWidget()
+        public override void Init()
         {
             var maxCpusCount = systemInfo.GetCPUsCount();
             
@@ -37,7 +40,7 @@ namespace wttop.Widgets {
                     };
 
                 bars[i] = 
-                    new Bar2(Color.Green){
+                    new Bar2(BarColor, Settings.MainBackgroundColor){
                         X = Pos.Right(cpus[i]),
                         Y = offsetY,
                         Width = Dim.Percent(75),

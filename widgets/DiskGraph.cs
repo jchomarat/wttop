@@ -1,12 +1,12 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
-using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop.Core;
 
 namespace wttop.Widgets {
     
+    // Widght that will display the disk graph
     public class DiskGraph : Widget
     { 
         Label write;
@@ -19,13 +19,16 @@ namespace wttop.Widgets {
         
         long valueRead = 0;
 
+        public Color WriteTextColor { get; set; } = Color.Red;
+
+        public Color ReadTextColor { get; set; } = Color.Green;
+
         public DiskGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
-            DrawWidget();
         }
 
-        void DrawWidget()
+        public override void Init()
         {
             Label titleWrite = new Label("Write (kB/sec): ")
             {
@@ -41,7 +44,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
             
-            write.TextColor = Terminal.Gui.Attribute.Make(Color.Red, Color.Black);
+            write.TextColor = Terminal.Gui.Attribute.Make(WriteTextColor, Settings.MainBackgroundColor);
 
             Add(write);            
             
@@ -59,7 +62,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(write)
             };
 
-            read.TextColor = Terminal.Gui.Attribute.Make(Color.Green, Color.Black);
+            read.TextColor = Terminal.Gui.Attribute.Make(ReadTextColor, Settings.MainBackgroundColor);
            
             Add(read);
         }

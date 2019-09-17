@@ -13,7 +13,7 @@ namespace wttop.Widgets.Common
 
         char barChar = 'I';
         
-        public Bar2(Color BarColor)
+        public Bar2(Color BarColor, Color BackgroundColor)
         {
             DrawFrame(this.Bounds, 0, false);
 
@@ -40,7 +40,7 @@ namespace wttop.Widgets.Common
                 Width = Dim.Fill(5)
             };
 
-            percentBar.TextColor = Terminal.Gui.Attribute.Make(BarColor, Color.Black);
+            percentBar.TextColor = Terminal.Gui.Attribute.Make(BarColor, BackgroundColor);
 
             Add(percentBar);
 

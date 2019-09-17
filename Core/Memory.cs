@@ -1,6 +1,6 @@
 using System;
 
-namespace wttop.Helpers {
+namespace wttop.Core {
 
     public class Memory {
         

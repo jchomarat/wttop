@@ -1,19 +1,19 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
-using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop.Core;
 
 namespace wttop.Widgets {
     
+    // Widght that will display the text on top of the app
     public class InfoText : WidgetFrameless
     { 
         Label textLabel;
         
         ISystemInfo systemInfo;
 
-        string textTemplate = "{0} on {1} / up-time: {2}";
+        string textTemplate = "{0} on {1} (version {2}) / up-time: {3}";
 
         public InfoText(IServiceProvider serviceProvider) : base()
         {
@@ -34,7 +34,7 @@ namespace wttop.Widgets {
         public override bool Update(MainLoop MainLoop)
         {
             var osInfo = systemInfo.GetOSInfo();
-            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.UpTimeForHuman);
+            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version, osInfo.UpTimeForHuman);
             return true;
         }
     }

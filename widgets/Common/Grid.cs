@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Linq;
 using Terminal.Gui;
-using NStack;
 
 namespace wttop.Widgets.Common
 {

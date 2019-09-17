@@ -4,12 +4,13 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop.Core;
 using wttop.Widgets.Common;
-using NStack;
 
 namespace wttop.Widgets {
     
+    // Widget to list processes.
+    // This class also uses Grid, a generic component that draws a grid.
     public class ProcessList : Widget
     { 
         Grid grid;
@@ -18,15 +19,24 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        public Color HeaderTextColor { get; set; } = Color.White;
+
+        public Color HeaderBackgroundColor { get; set; } = Color.DarkGray;
+
+        public Color FooterTextColor { get; set; } = Color.White;
+
+        public Color FooterBackgroundColor { get; set; } = Color.Black;
+
         public ProcessList(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
-            DrawWidget();
         }
 
-        void DrawWidget()
+        public override void Init()
         {
             dataSource = new ProcessListDataSourceBuilder();
+            dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(HeaderTextColor, HeaderBackgroundColor);
+            dataSource.FooterStyle = Terminal.Gui.Attribute.Make(FooterTextColor, FooterBackgroundColor);
             grid = new Grid(dataSource)
             {
                 X = 0,
@@ -42,12 +52,13 @@ namespace wttop.Widgets {
         {
             var processList = systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
-            
+
             grid.Update(MainLoop, processList.GetTop20.ToList());
             return true;
         }
     }
 
+    // In order to use the Grid widget, we need a GridDataSourceBuilder to get the source, the refresh and the style.
     public class ProcessListDataSourceBuilder: GridDataSourceBuilder
     {
         IList dataSource;
@@ -78,10 +89,8 @@ namespace wttop.Widgets {
 
         public Terminal.Gui.Attribute HeaderStyle
         {
-            get
-            {
-                return Terminal.Gui.Attribute.Make(Color.White, Color.DarkGray);
-            }
+            get;
+            set;
         }
 
         public decimal[] GetColumnsWidth()
@@ -120,10 +129,8 @@ namespace wttop.Widgets {
 
         public Terminal.Gui.Attribute FooterStyle
         {
-            get
-            {
-                return Terminal.Gui.Attribute.Make(Color.White, Color.Black);
-            }
+            get;
+            set;
         }
     }
 }

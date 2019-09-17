@@ -1,7 +1,7 @@
 using System;
 using System.Management;
 
-namespace wttop.Helpers {
+namespace wttop.Core {
 
     public class OSInfo
     {
@@ -10,6 +10,8 @@ namespace wttop.Helpers {
         public TimeSpan UpTime {get; set; }
 
         public string OSName {get; set; }
+
+        public string Version {get; set; }
 
         public string UpTimeForHuman
         {

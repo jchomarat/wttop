@@ -3,10 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop.Core;
 
 namespace wttop.Widgets {
     
+    // Widght that will display the memory (RAM) graph
     public class MemoryGraph : Widget
     { 
         Label details;
@@ -15,13 +16,14 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        public Color BarColor { get; set; } = Color.Red;
+
         public MemoryGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
-            DrawWidget();
         }
 
-        void DrawWidget()
+        public override void Init()
         {
             Label title = new Label("Memory usage: ")
             {
@@ -29,7 +31,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
             
-            bar = new Bar2(Color.Red)
+            bar = new Bar2(BarColor, Settings.MainBackgroundColor)
             {
                 X = Pos.Right(title),
                 Y = 1,

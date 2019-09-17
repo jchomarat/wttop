@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace wttop.Helpers {
+namespace wttop.Core {
 
     public class DiskDetails
     {

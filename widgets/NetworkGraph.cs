@@ -1,12 +1,12 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
-using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Helpers;
+using wttop.Core;
 
 namespace wttop.Widgets {
     
+    // Widght that will display the network graph
     public class NetworkGraph : Widget
     { 
         Label upl;
@@ -19,13 +19,16 @@ namespace wttop.Widgets {
         
         long valueDl = 0;
 
+        public Color DownloadTextColor { get; set; } = Color.Green;
+
+        public Color UploadTextColor { get; set; } = Color.Red;
+
         public NetworkGraph(string text, IServiceProvider serviceProvider) : base(text)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
-            DrawWidget();
         }
 
-        void DrawWidget()
+        public override void Init()
         {
             Label titleDl = new Label("Download (kB/sec): ")
             {
@@ -41,7 +44,7 @@ namespace wttop.Widgets {
                 Y = 1
             };
 
-            dl.TextColor = Terminal.Gui.Attribute.Make(Color.Green, Color.Black);
+            dl.TextColor = Terminal.Gui.Attribute.Make(DownloadTextColor, Settings.MainBackgroundColor);
            
             Add(dl);
 
@@ -59,7 +62,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(dl)
             };
 
-            upl.TextColor = Terminal.Gui.Attribute.Make(Color.Red, Color.Black);
+            upl.TextColor = Terminal.Gui.Attribute.Make(UploadTextColor, Settings.MainBackgroundColor);
 
             Add(upl);
 
