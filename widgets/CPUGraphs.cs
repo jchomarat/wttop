@@ -58,14 +58,13 @@ namespace wttop.Widgets {
             Add(bars);
         }
 
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var cpusUsage = systemInfo.GetCPUsUsage();
             for (var i = 0; i < bars.Length; i++)
             {
                 bars[i].Update(MainLoop, cpusUsage.ElementAt(i).PercentageUsage);
             };
-            return true;
         }
     }
 }

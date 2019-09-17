@@ -13,11 +13,23 @@ namespace wttop.Widgets {
         
         ISystemInfo systemInfo;
 
+        Settings settings;
+
         string textTemplate = "{0} on {1} (version {2}) / up-time: {3}";
+
+        protected override int RefreshTimeSeconds
+        {
+            get
+            {
+                return 60;
+            }
+        }
 
         public InfoText(IServiceProvider serviceProvider) : base()
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
+            settings = serviceProvider.GetService<Settings>();
+            
             DrawWidget();
         }
 
@@ -31,11 +43,10 @@ namespace wttop.Widgets {
            
             Add(textLabel);
         }
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var osInfo = systemInfo.GetOSInfo();
             textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version, osInfo.UpTimeForHuman);
-            return true;
         }
     }
 }

@@ -132,14 +132,19 @@ namespace wttop
 
             // Refresh section. Every second, update on all listed widget will be called
             //TODO: allow different rate per widget
+            int tick = 0;
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
-                osInfo.Update(MainLoop);
-                cpuGraph.Update(MainLoop);
-                memoryGraph.Update(MainLoop);
-                networkGraph.Update(MainLoop);
-                diskGraph.Update(MainLoop);
-                processList.Update(MainLoop);
+                osInfo.RefreshIfNeeded(MainLoop, tick);
+                cpuGraph.RefreshIfNeeded(MainLoop, tick);
+                memoryGraph.RefreshIfNeeded(MainLoop, tick);
+                networkGraph.RefreshIfNeeded(MainLoop, tick);
+                diskGraph.RefreshIfNeeded(MainLoop, tick);
+                processList.RefreshIfNeeded(MainLoop, tick);
+                tick ++;
+                // Every hour put it back to 0
+                if (tick > 360) tick = 1;
+                
                 return true;
             });
 

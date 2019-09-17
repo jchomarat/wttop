@@ -69,7 +69,7 @@ namespace wttop.Widgets {
             Add(read);
         }
         
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var disks = systemInfo.GetDiskActivity();
             if (valueWrite == 0)
@@ -88,7 +88,6 @@ namespace wttop.Widgets {
                 read.Text = $"{j}               ";
                 valueRead = disks.TotalBytesRead;
             }
-            return true;
         }
     }
 }

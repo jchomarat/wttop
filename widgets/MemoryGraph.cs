@@ -18,6 +18,14 @@ namespace wttop.Widgets {
 
         Settings settings;
 
+        protected override int RefreshTimeSeconds
+        {
+            get
+            {
+                return 20;
+            }
+        }
+
         public MemoryGraph(IServiceProvider serviceProvider)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
@@ -54,12 +62,11 @@ namespace wttop.Widgets {
             Add(details);
         }
         
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var memoryUsage = systemInfo.GetMemoryUsage();
             bar.Update(MainLoop, memoryUsage.PercentageUsed);
             details.Text = $"{memoryUsage.AvailableGB} GB available";
-            return true;
         }
     }
 }

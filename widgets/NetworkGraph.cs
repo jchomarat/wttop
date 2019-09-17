@@ -70,7 +70,7 @@ namespace wttop.Widgets {
 
             
         }
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var network = systemInfo.GetNetworkStatistics();
             if (valueDl == 0)
@@ -89,7 +89,6 @@ namespace wttop.Widgets {
                 dl.Text = $"{j}              ";
                 valueDl = network.TotalBytesReceived;
             }
-            return true;
         }
     }
 }

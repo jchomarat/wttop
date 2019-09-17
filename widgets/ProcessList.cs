@@ -46,13 +46,12 @@ namespace wttop.Widgets {
             Add(grid);
         }
 
-        public override bool Update(MainLoop MainLoop)
+        protected override void Update(MainLoop MainLoop)
         {
             var processList = systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
 
             grid.Update(MainLoop, processList.GetTop20.ToList());
-            return true;
         }
     }
 
