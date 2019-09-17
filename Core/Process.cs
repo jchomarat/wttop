@@ -16,6 +16,17 @@ namespace wttop.Core {
 
         public int HandleCount {get; set; }
 
+        public long MemoryUsageB {get; set; }
+
+        public decimal MemoryUsageMB
+        {
+            get
+            {
+                decimal d = MemoryUsageB/1024/1024;
+                return Math.Round(d, 2);
+            }
+        }
+
         public int PriorityBase {get; set; }
     }
 

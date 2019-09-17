@@ -9,9 +9,13 @@ namespace wttop.Core {
     {  
         ManagementObjectCollection runQuery(string queryString)
         {
+            ManagementObjectCollection results = null;
             var query = new System.Management.ObjectQuery(queryString);
-            var searcher = new ManagementObjectSearcher(query);
-            return searcher.Get();
+            using (var searcher = new ManagementObjectSearcher(query))
+            {
+                results = searcher.Get();
+            }
+            return results;
         }
 
         public OSInfo GetOperatingSystemInformation()
@@ -72,7 +76,7 @@ namespace wttop.Core {
 
         public IEnumerable<ProcessInfo> GetProcessesActivity()
         {
-            var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
+            var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase, WorkingSetPrivate FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
             var results = runQuery(queryString);
 
             return results.Cast<ManagementObject>()
@@ -82,7 +86,8 @@ namespace wttop.Core {
                     IDProcess = Convert.ToInt32(mo["IDProcess"]),
                     ThreadCount = Convert.ToInt32(mo["ThreadCount"]),
                     HandleCount = Convert.ToInt32(mo["HandleCOunt"]),
-                    PriorityBase = Convert.ToInt32(mo["PriorityBase"])
+                    PriorityBase = Convert.ToInt32(mo["PriorityBase"]),
+                    MemoryUsageB = Convert.ToInt64(mo["WorkingSetPrivate"])
                 });
         }
 

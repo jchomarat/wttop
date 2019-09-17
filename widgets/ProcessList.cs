@@ -81,8 +81,8 @@ namespace wttop.Widgets {
                 "Name", 
                 "ID", 
                 "CPU%", 
-                "ThreadCount", 
-                "HandleCount", 
+                "Memory(MB)",
+                "ThreadCount",  
                 "Priority"
             };
         }
@@ -99,9 +99,9 @@ namespace wttop.Widgets {
                 0.25m, 
                 0.15m, 
                 0.15m, 
-                0.15m, 
+                0.20m, 
                 0.15m,
-                0.15m
+                0.10m
             };
         }
 
@@ -116,8 +116,8 @@ namespace wttop.Widgets {
                 p.Name,
                 p.IDProcess.ToString(),
                 p.PercentProcessorTime.ToString(),
+                p.MemoryUsageMB.ToString(),
                 p.ThreadCount.ToString(),
-                p.HandleCount.ToString(),
                 p.PriorityBase.ToString()
             };
         }

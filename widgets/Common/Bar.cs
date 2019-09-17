@@ -1,39 +1,65 @@
+using System;
 using Terminal.Gui;
 
 namespace wttop.Widgets.Common
 {
 
-    // Bar chart implementation using framework native progress bar
+    // Bar chart implementation using Labels and '|' char
     public class Bar : Component<float>
-    {
-        ProgressBar progressBar;
+    {      
+        Label percentText;
+
+        Label percentBar;
+
+        char barChar = 'I';
         
-        public Bar(Color Foreground, Color Background)
+        public Bar(Color BarColor, Color BackgroundColor)
         {
             DrawFrame(this.Bounds, 0, false);
 
-            progressBar = new ProgressBar() {
+            Label openingBraquet = new Label("[")
+            {
                 X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill()
+                Y = 0
             };
 
-            var colorAttributes = Terminal.Gui.Attribute.Make(Foreground, Background);
-            var colorSchema = new ColorScheme();
-            colorSchema.Normal = colorAttributes;
-            colorSchema.HotNormal = colorAttributes;
-            colorSchema.HotFocus = colorAttributes;
-            colorSchema.Focus = colorAttributes;            
-            progressBar.ColorScheme = colorSchema;
-            
-            Add(progressBar);
+            Add(openingBraquet);
+
+            Label closingBraquet = new Label("]")
+            {
+                X = Pos.AnchorEnd(5),
+                Y = 0
+            };
+
+            Add(closingBraquet);
+
+            percentBar = new Label(string.Empty)
+            {
+                X = Pos.Right(openingBraquet),
+                Y = 0,
+                Width = Dim.Fill(5)
+            };
+
+            percentBar.TextColor = Terminal.Gui.Attribute.Make(BarColor, BackgroundColor);
+
+            Add(percentBar);
+
+            percentText = new Label(string.Empty)
+            {
+                X = Pos.Right(closingBraquet),
+                Y = 0
+            };
+
+            Add(percentText);
         }
 
         protected override void UpdateAction(float newValue)
         {
-           // Value are between 0 and 1, hence the division
-           progressBar.Fraction = newValue / 100;
+           percentText.Text = $" {newValue} %   ";
+           // Get the label that acts as progress bar width, to calculate how many | to write
+           var lblWidth = percentBar.Bounds.Width;
+           int charCount = (int)Math.Floor((newValue*lblWidth)/100);
+           percentBar.Text = new string(barChar, charCount);
         }
     }
 }

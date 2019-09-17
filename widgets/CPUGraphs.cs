@@ -14,7 +14,7 @@ namespace wttop.Widgets {
     {    
         Label[] cpus;
         
-        Bar2[] bars;
+        Bar[] bars;
         
         ISystemInfo systemInfo;
 
@@ -30,7 +30,7 @@ namespace wttop.Widgets {
             var maxCpusCount = systemInfo.GetCPUsCount();
             
             cpus = new Label[maxCpusCount];
-            bars = new Bar2[maxCpusCount];
+            bars = new Bar[maxCpusCount];
             var offsetY = 1;
             for (var i = 0; i < maxCpusCount; i++)
             {    
@@ -40,7 +40,7 @@ namespace wttop.Widgets {
                     };
 
                 bars[i] = 
-                    new Bar2(BarColor, Settings.MainBackgroundColor){
+                    new Bar(BarColor, Settings.MainBackgroundColor){
                         X = Pos.Right(cpus[i]),
                         Y = offsetY,
                         Width = Dim.Percent(75),

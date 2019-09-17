@@ -7,14 +7,14 @@ namespace wttop.Core
     {
         WMIWrapper wmi;
 
-        public OSInfo GetOSInfo()
-        {
-            return wmi.GetOperatingSystemInformation();
-        }
-
         public WindowsDriver()
         {
             wmi = new WMIWrapper();
+        }
+
+        public OSInfo GetOSInfo()
+        {
+            return wmi.GetOperatingSystemInformation();
         }
 
         public int GetCPUsCount()
@@ -22,6 +22,7 @@ namespace wttop.Core
              return wmi.GetNumberOfLogicalProcessors();
         }
 
+        //TODO Change tuple to actual object
         public IEnumerable<Cpu> GetCPUsUsage()
         {
              return wmi.GetCPUsUsage()
