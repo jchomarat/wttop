@@ -30,7 +30,7 @@ namespace wttop.Widgets {
             Label titleDl = new Label("Download (kB/sec): ")
             {
                 X = 1,
-                Y = 2
+                Y = 1
             };
 
             Add(titleDl);
@@ -38,7 +38,7 @@ namespace wttop.Widgets {
             dl = new Label(string.Empty)
             {
                 X = Pos.Right(titleDl),
-                Y = 2
+                Y = 1
             };
 
             dl.TextColor = Terminal.Gui.Attribute.Make(Color.Green, Color.Black);

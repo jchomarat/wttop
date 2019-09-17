@@ -44,6 +44,16 @@ namespace wttop.Helpers {
                     .Take(10);
             }
         }
+
+        public IEnumerable<ProcessInfo> GetTop20
+        {
+            get
+            {
+                return processes
+                    .OrderByDescending(p => p.PercentProcessorTime)
+                    .Take(20);
+            }
+        }
         
         public int ProcessesCount
         {

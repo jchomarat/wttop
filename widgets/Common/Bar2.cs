@@ -10,6 +10,8 @@ namespace wttop.Widgets.Common
         Label percentText;
 
         Label percentBar;
+
+        char barChar = 'I';
         
         public Bar2(Color BarColor)
         {
@@ -57,7 +59,7 @@ namespace wttop.Widgets.Common
            // Get the label that acts as progress bar width, to calculate how many | to write
            var lblWidth = percentBar.Bounds.Width;
            int charCount = (int)Math.Floor((newValue*lblWidth)/100);
-           percentBar.Text = new string('|', charCount);
+           percentBar.Text = new string(barChar, charCount);
         }
     }
 }

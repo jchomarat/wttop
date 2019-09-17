@@ -10,26 +10,17 @@ namespace wttop.Widgets.Common
     {
         GridDataSourceBuilder dataSourceBuilder;
 
-        int y = 1;
-
         public Grid(GridDataSourceBuilder DataSourceBuilder)
         {
             dataSourceBuilder = DataSourceBuilder;
 
             DrawFrame(this.Bounds, 0, false);
-
-            var mainColorScheme = new ColorScheme();
-            var mainColorAttributes = Terminal.Gui.Attribute.Make(Color.Black, Color.BrightGreen);
-            mainColorScheme.Focus = mainColorAttributes;
-            mainColorScheme.HotFocus = mainColorAttributes;
-            mainColorScheme.HotNormal = mainColorAttributes;
-            mainColorScheme.Normal = mainColorAttributes;
-
-            this.ColorScheme = mainColorScheme;   
         }
 
         public override void Redraw(Rect region)
         {
+            Driver.SetAttribute(dataSourceBuilder.HeaderStyle);
+            
             //Generate header
             int y = 1;
             int x = 1;
@@ -61,13 +52,16 @@ namespace wttop.Widgets.Common
         protected override void UpdateAction(IList newListItems)
         {
             dataSourceBuilder.DataSource = newListItems;
-
-            // Ensure color schema is correct
+           
+            var mainColorAttributes = Terminal.Gui.Attribute.Make(Color.White, Color.Black);
+            Driver.SetAttribute(mainColorAttributes);
+            
+            int x = 0;
             for(int i = 0; i < dataSourceBuilder.DataSource.Count; i ++)
             {
-                var row = dataSourceBuilder.GetRowData(i);
-                int x = i + 2;
+                x = i + 2;
                 int y = 1;
+                var row = dataSourceBuilder.GetRowData(i);
                 
                 for(int j = 0; j < row.Length; j++)
                 {
@@ -76,6 +70,9 @@ namespace wttop.Widgets.Common
                     y += width;
                 };
             }
+
+            // Draw footer
+            WriteText(x + 2, 1, 50, dataSourceBuilder.GetFooter());
         }
     }
 
@@ -85,8 +82,20 @@ namespace wttop.Widgets.Common
 
         string[] GetHeader();
 
+        Terminal.Gui.Attribute HeaderStyle
+        {
+            get;
+        }
+
         decimal[] GetColumnsWidth();
 
         string[] GetRowData(int index);
+
+        string GetFooter();
+
+        Terminal.Gui.Attribute FooterStyle
+        {
+            get;
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(21)
+                Height= Dim.Sized(20)
             };
             
             win.Add(viewTopLeft);
@@ -63,7 +63,7 @@ namespace wttop
                 X = Pos.Right(viewTopLeft),
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(21)
+                Height= Dim.Sized(20)
             };
 
             win.Add(viewTopRight);
@@ -73,7 +73,7 @@ namespace wttop
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height= Dim.Sized(7)
+                Height= Dim.Sized(6)
             };
 
             var networkGraph = new NetworkGraph("Network activity", serviceProvider)
@@ -96,7 +96,7 @@ namespace wttop
             viewTopRight.Add(networkGraph);
             viewTopRight.Add(diskGraph);
 
-            var processList = new ProcessList("Processes list", serviceProvider)
+            var processList = new ProcessList("Processes list (top 20)", serviceProvider)
             {
                 X = 0,
                 Y = Pos.Bottom(viewTopLeft),

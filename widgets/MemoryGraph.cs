@@ -26,13 +26,13 @@ namespace wttop.Widgets {
             Label title = new Label("Memory usage: ")
             {
                 X = 1,
-                Y = 2
+                Y = 1
             };
             
             bar = new Bar2(Color.Red)
             {
                 X = Pos.Right(title),
-                Y = 2,
+                Y = 1,
                 Width = Dim.Percent(30),
                 Height= Dim.Sized(1)
             };
