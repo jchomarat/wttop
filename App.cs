@@ -14,6 +14,47 @@ namespace wttop
     {
         static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                // No args, launch the app
+                StartApp();
+            }
+            else
+            {
+                HandleCommandArgs(args);
+            }
+        }
+
+        static void HandleCommandArgs(string[] args)
+        {
+            if (args[0] == "-h" || args[0] == "--help")
+            {
+                ShowHelp();
+            }
+            else
+            {
+                Console.WriteLine("Invalid command.");
+                ShowHelp();
+            }
+        }
+
+        static void ShowHelp()
+        {
+            Console.WriteLine("");
+            Console.WriteLine(" WTTOP: the new Windows Terminal system monitor");
+            Console.WriteLine("   Author:  Julien Chomarat (https://github.com/jchomarat)");
+            Console.WriteLine("   Version: 1.0");
+            Console.WriteLine("   Licence: MIT");
+            Console.WriteLine("");
+            Console.WriteLine(" Usage: wttop [options]");
+            Console.WriteLine("");
+            Console.WriteLine(" Options:");
+            Console.WriteLine("    -h, --help    Show this help");
+            Console.WriteLine("");
+        }
+
+        static void StartApp()
+        {
             // Use injection to send the driver implementation to the core
             ServiceCollection serviceCollection = new ServiceCollection();
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -60,7 +101,7 @@ namespace wttop
                 Height = Dim.Fill()
             };
             win.ColorScheme = mainColorScheme;
-            top.Add (win);
+            top.Add(win);
 
             var osInfo = new InfoText(serviceProvider)
             {
@@ -156,6 +197,12 @@ namespace wttop
             {
                 throw new ApplicationException("Could not launch the application.");
             }
+        }
+
+        static bool Quit ()
+        {
+            var n = MessageBox.Query (50, 7, "Quit Demo", "Are you sure you want to quit this demo?", "Yes", "No");
+            return n == 0;
         }
     }
 }
