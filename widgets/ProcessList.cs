@@ -11,7 +11,7 @@ namespace wttop.Widgets {
     
     // Widget to list processes.
     // This class also uses Grid, a generic component that draws a grid.
-    public class ProcessList : Widget
+    public class ProcessList : WidgetFrame
     { 
         Grid grid;
 

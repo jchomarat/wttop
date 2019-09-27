@@ -8,7 +8,7 @@ using wttop.Core;
 namespace wttop.Widgets {
     
     // Widght that will display the memory (RAM) graph
-    public class MemoryGraph : Widget
+    public class MemoryGraph : WidgetFrame
     { 
         Label details;
         

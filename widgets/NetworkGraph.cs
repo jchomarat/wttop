@@ -7,7 +7,7 @@ using wttop.Core;
 namespace wttop.Widgets {
     
     // Widght that will display the network graph
-    public class NetworkGraph : Widget
+    public class NetworkGraph : WidgetFrame
     { 
         Label upl;
         

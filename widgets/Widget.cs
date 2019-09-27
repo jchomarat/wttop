@@ -1,12 +1,12 @@
 using Terminal.Gui;
 using Mono.Terminal;
 
-namespace wttop.Widgets {
-
+namespace wttop.Widgets
+{
     // Base class for all widget with a border
     // It implements FrameWiew, built in Terminal.Gui to be able to draw on the terminal. FrameView draws a border around the widget
-    public abstract class Widget : FrameView {
-
+    public abstract class WidgetFrame : FrameView 
+    {
         protected virtual int RefreshTimeSeconds
         {
             get
@@ -15,7 +15,7 @@ namespace wttop.Widgets {
             }
         }
 
-        public Widget() : base(string.Empty){}
+        public WidgetFrame() : base(string.Empty){}
 
         public void RefreshIfNeeded(MainLoop MainLoop, int tick)
         {

@@ -7,7 +7,7 @@ using wttop.Core;
 namespace wttop.Widgets {
     
     // Widght that will display the disk graph
-    public class DiskGraph : Widget
+    public class DiskGraph : WidgetFrame
     { 
         Label write;
         
