@@ -56,7 +56,7 @@ namespace wttop.Core {
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop20
+        public IEnumerable<ProcessInfo> GetTop12
         {
             get
             {

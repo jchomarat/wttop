@@ -118,7 +118,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(20)
+                Height= Dim.Sized(18)
             };
             
             win.Add(cpuGraph);
@@ -128,7 +128,7 @@ namespace wttop
                 X = Pos.Right(cpuGraph),
                 Y = Pos.Bottom(osInfo),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(20)
+                Height= Dim.Sized(18)
             };
 
             win.Add(viewTopRight);
@@ -146,7 +146,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(memoryGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(7)
+                Height= Dim.Sized(6)
             };
 
             var diskGraph = new DiskGraph(serviceProvider)
@@ -154,7 +154,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(networkGraph),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(7)
+                Height= Dim.Sized(6)
             };
 
             viewTopRight.Add(memoryGraph); 

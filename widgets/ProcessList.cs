@@ -51,7 +51,7 @@ namespace wttop.Widgets {
             var processList = systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
 
-            grid.Update(MainLoop, processList.GetTop20.ToList());
+            grid.Update(MainLoop, processList.GetTop12.ToList());
         }
     }
 

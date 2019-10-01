@@ -51,7 +51,7 @@ namespace wttop.Widgets {
                         Height= Dim.Sized(1)
                     };
 
-                offsetY += 2;
+                offsetY += 1;
             }
         
             Add(cpus);
