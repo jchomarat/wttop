@@ -56,13 +56,13 @@ namespace wttop.Core {
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop12
+        public IEnumerable<ProcessInfo> GetTop15
         {
             get
             {
                 return processes
                     .OrderByDescending(p => p.PercentProcessorTime)
-                    .Take(20);
+                    .Take(15);
             }
         }
         

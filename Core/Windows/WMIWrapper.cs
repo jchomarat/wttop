@@ -5,6 +5,10 @@ using System.Management;
 
 namespace wttop.Core {
 
+    /// <summary>
+    /// Wrapper for all WMI calls.
+    /// Dirty implementation so that I can change it if I find a better way
+    /// </summary>
     public class WMIWrapper
     {  
         ManagementObjectCollection runQuery(string queryString)
@@ -33,13 +37,17 @@ namespace wttop.Core {
             };
         }
 
-        public IEnumerable<Tuple<string, string>> GetCPUsUsage()
+        public IEnumerable<wttop.Core.Cpu> GetCPUsUsage()
         {
             var queryString = "SELECT name, PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE NOT name = '_Total'";
             var results = runQuery(queryString);
 
             return results.Cast<ManagementObject>()
-                .Select(mo => new Tuple<string, string>(mo["name"].ToString(), mo["PercentProcessorTime"].ToString()));
+                .Select(mo => new wttop.Core.Cpu()
+                {
+                    Name = mo["name"].ToString(),
+                    PercentageUsage = int.Parse(mo["PercentProcessorTime"].ToString())
+                });
         }
 
         public int GetNumberOfLogicalProcessors()
@@ -50,15 +58,19 @@ namespace wttop.Core {
             return Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["NumberOfLogicalProcessors"]);
         }
 
-        public Tuple<int, int> GetMemoryUsageKb()
+        public Memory GetMemoryUsageKb()
         {
             var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize FROM Win32_OperatingSystem";
             var results = runQuery(queryString);
 
             var available = Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["FreePhysicalMemory"]);
             var total = Convert.ToInt32(results.Cast<ManagementObject>().FirstOrDefault()["TotalVisibleMemorySize"]);
-            
-            return new Tuple<int, int>(total, available);
+
+            return new Memory()
+            {
+                AvailableKb = available,
+                TotalKb = total
+            };
         }
 
         public IEnumerable<InterfaceDetails> GetNetworkInterfacesDetails()

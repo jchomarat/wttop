@@ -3,6 +3,11 @@ using Mono.Terminal;
 
 namespace wttop.Widgets.Common {
 
+    /// <summary>
+    /// Base class for each custom components
+    /// It takes the type of value that will be sent to the Update method
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class Component<T> : View
     {
         

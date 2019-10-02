@@ -5,8 +5,10 @@ using Mono.Terminal;
 using wttop.Core;
 
 namespace wttop.Widgets {
-    
-    // Widght that will display the disk graph
+ 
+    /// <summary>
+    /// Widget that will display the disk graph
+    /// </summary>
     public class DiskGraph : WidgetFrame
     { 
         Label write;

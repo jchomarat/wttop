@@ -66,7 +66,7 @@ namespace wttop
         # region Processes list widget
 
         // Processes list widget title (it is only the top 20)
-        public string ProcessesListWidgetTitle {get; set; } = "Processes list (top 20)";
+        public string ProcessesListWidgetTitle {get; set; } = "Processes list (top 15)";
 
         // Color of the Processes list header text
         public Color ProcessesListHeaderTextColor {get; set; } = Color.White;

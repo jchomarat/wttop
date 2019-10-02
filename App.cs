@@ -9,7 +9,9 @@ using wttop.Core.ext;
 
 namespace wttop
 {
-    /// Main class, called to start the application
+    /// <summary>
+    /// Main class to start the application
+    /// </summary>
     class App
     {
         static void Main(string[] args)
@@ -25,6 +27,10 @@ namespace wttop
             }
         }
 
+        /// <summary>
+        /// Parse command line arguments
+        /// </summary>
+        /// <param name="args">Argumenrs array passed to the exe.</param>
         static void HandleCommandArgs(string[] args)
         {
             if (args[0] == "-h" || args[0] == "--help")
@@ -38,6 +44,9 @@ namespace wttop
             }
         }
 
+        /// <summary>
+        /// Display the help and the about
+        /// </summary>
         static void ShowHelp()
         {
             Console.WriteLine("");
@@ -53,6 +62,9 @@ namespace wttop
             Console.WriteLine("");
         }
 
+        /// <summary>
+        /// Start the application
+        /// </summary>
         static void StartApp()
         {
             // Use injection to send the driver implementation to the core
@@ -79,9 +91,9 @@ namespace wttop
             {
                 Application.Init();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ApplicationException("Could not initialize the application.");
+                Console.WriteLine($"Error - could not initialize the application. The inner exception is {ex.Message}");
             }
 
             // Build the application UI with widgets
@@ -172,7 +184,7 @@ namespace wttop
             win.Add(processList);
 
             // Refresh section. Every second, update on all listed widget will be called
-            //TODO: allow different rate per widget
+            // Each seconds the UI refreshs, but a frequency can be set by overridind the property RefreshTimeSeconds for each widdget
             int tick = 0;
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
@@ -193,16 +205,10 @@ namespace wttop
             {
                 Application.Run();
             }
-            catch
+            catch(Exception ex)
             {
-                throw new ApplicationException("Could not launch the application.");
+                Console.WriteLine($"Error - could not launch the application. The inner exception is {ex.Message}");
             }
-        }
-
-        static bool Quit ()
-        {
-            var n = MessageBox.Query (50, 7, "Quit Demo", "Are you sure you want to quit this demo?", "Yes", "No");
-            return n == 0;
         }
     }
 }

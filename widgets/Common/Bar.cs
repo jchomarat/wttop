@@ -4,7 +4,9 @@ using Terminal.Gui;
 namespace wttop.Widgets.Common
 {
 
-    // Bar chart implementation using Labels and '|' char
+    /// <summary>
+    /// Bar chart implementation using Labels and 'I' char
+    /// </summary>
     public class Bar : Component<float>
     {      
         Label percentText;
@@ -53,6 +55,11 @@ namespace wttop.Widgets.Common
             Add(percentText);
         }
 
+        /// <summary>
+        /// The idea here is to add as many barChar to "mock" a bar.
+        /// The percentage is calcaultaed from the bar width (width being char)
+        /// </summary>
+        /// <param name="newValue"></param>
         protected override void UpdateAction(float newValue)
         {
            percentText.Text = $" {newValue} %   ";

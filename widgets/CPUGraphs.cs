@@ -8,8 +8,10 @@ using wttop;
 using wttop.Core;
 
 namespace wttop.Widgets {
-    
-    // Widght that will display the CPU usage graph
+
+    /// <summary>
+    /// Widget that will display the CPU usage graph
+    /// </summary>
     public class CPUGraphs : WidgetFrame
     {    
         Label[] cpus;

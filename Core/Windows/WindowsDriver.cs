@@ -3,6 +3,11 @@ using System.Linq;
 
 namespace wttop.Core
 {
+    /// <summary>
+    /// Windows driver for wttop.
+    /// This is a wrapper of WMI calls. Why WMi, well because in dotnetcore, we cannot get all this system values.
+    /// WMI is probably the oldest way to do it, but a straigthforward one.
+    /// </summary>
     public class WindowsDriver : ISystemInfo
     {
         WMIWrapper wmi;
@@ -25,23 +30,12 @@ namespace wttop.Core
         //TODO Change tuple to actual object
         public IEnumerable<Cpu> GetCPUsUsage()
         {
-             return wmi.GetCPUsUsage()
-                .Select(tuple => new wttop.Core.Cpu()
-                {
-                    Name = tuple.Item1,
-                    PercentageUsage = int.Parse(tuple.Item2)
-                });
+            return wmi.GetCPUsUsage();
         }
 
         public Memory GetMemoryUsage()
         {
-            var memoryInfo = wmi.GetMemoryUsageKb();
-
-            return new Memory()
-            {
-                TotalKb = memoryInfo.Item1,
-                AvailableKb = memoryInfo.Item2
-            };
+            return wmi.GetMemoryUsageKb();
         }
 
         public Network GetNetworkStatistics()

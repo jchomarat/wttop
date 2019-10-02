@@ -6,8 +6,10 @@ using Mono.Terminal;
 using wttop.Core;
 
 namespace wttop.Widgets {
-    
-    // Widght that will display the memory (RAM) graph
+
+    /// <summary>
+    /// Widget that will display the memory (RAM) graph
+    /// </summary>
     public class MemoryGraph : WidgetFrame
     { 
         Label details;

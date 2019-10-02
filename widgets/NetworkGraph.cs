@@ -5,8 +5,10 @@ using Mono.Terminal;
 using wttop.Core;
 
 namespace wttop.Widgets {
-    
-    // Widght that will display the network graph
+
+    /// <summary>
+    /// Widget that will display the network graph
+    /// </summary>
     public class NetworkGraph : WidgetFrame
     { 
         Label upl;

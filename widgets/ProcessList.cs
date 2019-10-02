@@ -8,9 +8,11 @@ using wttop.Core;
 using wttop.Widgets.Common;
 
 namespace wttop.Widgets {
-    
-    // Widget to list processes.
-    // This class also uses Grid, a generic component that draws a grid.
+
+    /// <summary>
+    /// Widget to list running processes.
+    /// This class also uses Grid, a generic component that draws a grid.
+    /// </summary>
     public class ProcessList : WidgetFrame
     { 
         Grid grid;
@@ -51,12 +53,14 @@ namespace wttop.Widgets {
             var processList = systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
 
-            grid.Update(MainLoop, processList.GetTop12.ToList());
+            grid.Update(MainLoop, processList.GetTop15.ToList());
         }
     }
 
-    // In order to use the Grid widget, we need a GridDataSourceBuilder to get the source, the refresh and the style.
-    public class ProcessListDataSourceBuilder: GridDataSourceBuilder
+    /// <summary>
+    /// In order to use the Grid widget, we need a GridDataSourceBuilder to get the source, the refresh and the style.
+    /// </summary>
+    public class ProcessListDataSourceBuilder: IGridDataSourceBuilder
     {
         IList dataSource;
 

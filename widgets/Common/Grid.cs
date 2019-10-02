@@ -5,11 +5,16 @@ using Terminal.Gui;
 
 namespace wttop.Widgets.Common
 {
+    /// <summary>
+    /// Grid component that draws a table.
+    /// In order to parametrize it (data + header + footer + col width), you need also to implement the 
+    /// interface IGridDataSourceBuilder
+    /// </summary>
     public class Grid : Component<IList>
     {
-        GridDataSourceBuilder dataSourceBuilder;
+        IGridDataSourceBuilder dataSourceBuilder;
 
-        public Grid(GridDataSourceBuilder DataSourceBuilder)
+        public Grid(IGridDataSourceBuilder DataSourceBuilder)
         {
             dataSourceBuilder = DataSourceBuilder;
 
@@ -31,6 +36,13 @@ namespace wttop.Widgets.Common
             };
         }
 
+        /// <summary>
+        /// Write the content and fill in the rest of the columns with blanks
+        /// </summary>
+        /// <param name="rowIndex">Index of the row to write to</param>
+        /// <param name="colIndex">Index of the column to write to</param>
+        /// <param name="width">Width of the col, as set in the IGridDataSourceBuilder implementation</param>
+        /// <param name="text">Text to write</param>
         void WriteText(int rowIndex, int colIndex, int width, string text)
         {
             int offset = 0;
@@ -76,23 +88,52 @@ namespace wttop.Widgets.Common
         }
     }
 
-    public interface GridDataSourceBuilder
+    /// <summary>
+    /// Interface to impkement to feed the grid with actual data
+    /// </summary>
+    public interface IGridDataSourceBuilder
     {
+        /// <summary>
+        /// Set the data source to display
+        /// </summary>
         IList DataSource {get; set;}
 
+        /// <summary>
+        /// An array of string header columns
+        /// </summary>
+        /// <returns></returns>
         string[] GetHeader();
 
+        /// <summary>
+        /// Style of the header (background and forgrounc colors)
+        /// </summary>
         Terminal.Gui.Attribute HeaderStyle
         {
             get;
         }
 
+        /// <summary>
+        /// An array of decimals for Columns widths
+        /// </summary>
+        /// <returns></returns>
         decimal[] GetColumnsWidth();
 
+        /// <summary>
+        /// For a given index, send back the array of data
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         string[] GetRowData(int index);
 
+        /// <summary>
+        /// Footer to display
+        /// </summary>
+        /// <returns></returns>
         string GetFooter();
 
+        /// <summary>
+        /// Style of the footer (background and forgrounc colors)
+        /// </summary>
         Terminal.Gui.Attribute FooterStyle
         {
             get;
