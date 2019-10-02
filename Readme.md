@@ -26,7 +26,7 @@ The widgets available are
 
 ## Installation
 
-With *dotnetcore 3.0*, only one self-contained .exe file is used. You do not even need to have dotnetcore 3.0 installed on your machine.
+With *dotnetcore 3.0*, only one self-contained .exe file is used. You do not even need to have *dotnetcore 3.0* installed on your machine.
 
 Simply download the [latest version](https://github.com/jchomarat/wttop/releases), store it somewhere in your *$path*, and run the command from the *terminal* (both *PowerShell* & *CMD shell*)
 
