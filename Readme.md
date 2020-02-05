@@ -36,11 +36,15 @@ Simply download the [latest version](https://github.com/jchomarat/wttop/releases
 
 ## Todo
 
+[ ] Add system time widget
+
 [ ] Make it compatible with OSX
 
 [ ] Make it compatible with Linux
 
 [ ] Allow command to kill a process
+
+[ ] Investigate the ability to adjust layout, via config file for instance
 
 ## License
 
