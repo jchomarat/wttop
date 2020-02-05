@@ -22,5 +22,9 @@ namespace wttop.Core {
         Process GetProcessActivity();
 
         Disk GetDiskActivity();
+
+        Uptime GetSystemUpTime();
+
+        SystemTime GetSystemDateTime();
     }
 }

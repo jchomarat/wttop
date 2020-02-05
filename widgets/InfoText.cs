@@ -17,7 +17,7 @@ namespace wttop.Widgets {
 
         Settings settings;
 
-        string textTemplate = "{0} on {1} (version {2}) / up-time: {3}";
+        string textTemplate = "{0} on {1} (version {2})";
 
         protected override int RefreshTimeSeconds
         {
@@ -48,7 +48,7 @@ namespace wttop.Widgets {
         protected override void Update(MainLoop MainLoop)
         {
             var osInfo = systemInfo.GetOSInfo();
-            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version, osInfo.UpTimeForHuman);
+            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
         }
     }
 }
