@@ -52,7 +52,7 @@ namespace wttop
             Console.WriteLine("");
             Console.WriteLine(" WTTOP: the new Windows Terminal system monitor");
             Console.WriteLine("   Author:  Julien Chomarat (https://github.com/jchomarat)");
-            Console.WriteLine("   Version: 1.0");
+            Console.WriteLine("   Version: 1.1");
             Console.WriteLine("   Licence: MIT");
             Console.WriteLine("");
             Console.WriteLine(" Usage: wttop [options]");
@@ -115,7 +115,7 @@ namespace wttop
             win.ColorScheme = mainColorScheme;
             top.Add(win);
 
-            var osInfo = new InfoText(serviceProvider)
+            var osInfo = new wttop.Widgets.OSInfo(serviceProvider)
             {
                 X = 0,
                 Y = 0,
@@ -125,10 +125,30 @@ namespace wttop
 
             win.Add(osInfo);
 
+            var upTime = new wttop.Widgets.Uptime(serviceProvider)
+            {
+                X = 0,
+                Y = 1,
+                Width = Dim.Fill(),
+                Height = Dim.Sized(3)
+            };
+
+            win.Add(upTime);
+
+            var systemTime = new wttop.Widgets.SystemTime(serviceProvider)
+            {
+                X = 0,
+                Y = 2,
+                Width = Dim.Fill(),
+                Height = Dim.Sized(3)
+            };
+
+            win.Add(systemTime);
+
             var cpuGraph = new CPUGraphs(serviceProvider)
             {
                 X = 0,
-                Y = Pos.Bottom(osInfo),
+                Y = Pos.Bottom(systemTime),
                 Width = Dim.Percent(50),
                 Height= Dim.Sized(18)
             };
@@ -138,7 +158,7 @@ namespace wttop
             var viewTopRight = new View()
             {
                 X = Pos.Right(cpuGraph),
-                Y = Pos.Bottom(osInfo),
+                Y = Pos.Bottom(systemTime),
                 Width = Dim.Fill(),
                 Height= Dim.Sized(18)
             };
@@ -189,6 +209,8 @@ namespace wttop
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
                 osInfo.RefreshIfNeeded(MainLoop, tick);
+                upTime.RefreshIfNeeded(MainLoop, tick);
+                systemTime.RefreshIfNeeded(MainLoop, tick);
                 cpuGraph.RefreshIfNeeded(MainLoop, tick);
                 memoryGraph.RefreshIfNeeded(MainLoop, tick);
                 networkGraph.RefreshIfNeeded(MainLoop, tick);

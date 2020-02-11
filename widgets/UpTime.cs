@@ -9,7 +9,7 @@ namespace wttop.Widgets {
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
-    public class InfoText : WidgetFrameless
+    public class Uptime : WidgetFrameless
     { 
         Label textLabel;
         
@@ -17,7 +17,7 @@ namespace wttop.Widgets {
 
         Settings settings;
 
-        string textTemplate = "{0} on {1} (version {2})";
+        string textTemplate = "Uptime: {0}";
 
         protected override int RefreshTimeSeconds
         {
@@ -27,7 +27,7 @@ namespace wttop.Widgets {
             }
         }
 
-        public InfoText(IServiceProvider serviceProvider) : base()
+        public Uptime(IServiceProvider serviceProvider) : base()
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
@@ -47,8 +47,8 @@ namespace wttop.Widgets {
         }
         protected override void Update(MainLoop MainLoop)
         {
-            var osInfo = systemInfo.GetOSInfo();
-            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
+            var upt = systemInfo.GetSystemUpTime();
+            textLabel.Text = string.Format(textTemplate, upt.UpTimeForHuman);
         }
     }
 }
