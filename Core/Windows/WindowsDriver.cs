@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Threading.Tasks;
 
 namespace wttop.Core
@@ -26,13 +27,9 @@ namespace wttop.Core
             };
         }
 
-        public async Task<int> GetCPUsCount()
+        public int GetCPUsCount()
         {
-            var queryString = "SELECT NumberOfLogicalProcessors FROM Win32_Processor";
-            var wmiReader = new WmiReader();
-            var results = await wmiReader.ExecuteScalar(queryString);
-
-            return Convert.ToInt32(results["NumberOfLogicalProcessors"]);
+            return Environment.ProcessorCount;
         }
 
         public async Task<IEnumerable<Cpu>> GetCPUsUsage()
@@ -46,6 +43,19 @@ namespace wttop.Core
                     Name = mo["name"].ToString(),
                     PercentageUsage = int.Parse(mo["PercentProcessorTime"].ToString())
                 });
+        }
+
+        public async Task<Cpu> GetTotalCpuUsage()
+        {
+            var queryString = "SELECT PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE name = '_Total'";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.ExecuteScalar(queryString);
+
+            return new Cpu()
+            {
+                Name = "Total",
+                PercentageUsage = int.Parse(results["PercentProcessorTime"].ToString())
+            };
         }
 
         public async Task<Memory> GetMemoryUsage()

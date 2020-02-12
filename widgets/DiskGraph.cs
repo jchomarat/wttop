@@ -18,7 +18,7 @@ namespace wttop.Widgets {
         
         long valueRead = 0;
 
-        public DiskGraph(IServiceProvider serviceProvider): base(serviceProvider, false) {}
+        public DiskGraph(IServiceProvider serviceProvider): base(serviceProvider) {}
 
         protected override void DrawWidget()
         {

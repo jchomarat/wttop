@@ -18,7 +18,7 @@ namespace wttop.Widgets {
         
         long valueDl = 0;
 
-        public NetworkGraph(IServiceProvider serviceProvider) : base(serviceProvider, false) {}
+        public NetworkGraph(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {

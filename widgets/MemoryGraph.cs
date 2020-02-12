@@ -23,7 +23,7 @@ namespace wttop.Widgets {
             }
         }
 
-        public MemoryGraph(IServiceProvider serviceProvider) : base(serviceProvider, false) {}
+        public MemoryGraph(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {  

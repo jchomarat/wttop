@@ -30,13 +30,12 @@ namespace wttop.Widgets
             }
         }
 
-        public WidgetFrame(IServiceProvider serviceProvider, bool DrawAsynchronously) : base(string.Empty)
+        public WidgetFrame(IServiceProvider serviceProvider) : base(string.Empty)
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
 
-            if (!DrawAsynchronously)
-                Draw();
+            Draw();
         }
 
         protected abstract void DrawWidget();

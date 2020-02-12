@@ -19,7 +19,7 @@ namespace wttop.Widgets {
 
         ProcessListDataSourceBuilder dataSource;
 
-        public ProcessList(IServiceProvider serviceProvider) : base(serviceProvider, false) {}
+        public ProcessList(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {

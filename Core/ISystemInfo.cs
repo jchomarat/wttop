@@ -12,7 +12,7 @@ namespace wttop.Core {
     {
         Task<OSInfo> GetOSInfo();
 
-        Task<int> GetCPUsCount();
+        int GetCPUsCount();
 
         Task<IEnumerable<Cpu>> GetCPUsUsage();
 
@@ -27,5 +27,7 @@ namespace wttop.Core {
         Task<Uptime> GetSystemUpTime();
 
         Task<SystemTime> GetSystemDateTime();
+
+        Task<Cpu> GetTotalCpuUsage();
     }
 }
