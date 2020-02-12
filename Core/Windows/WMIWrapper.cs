@@ -24,7 +24,7 @@ namespace wttop.Core {
 
         public OSInfo GetOperatingSystemInformation()
         {
-            var queryString = "SELECT caption, version, CSName, LastBootUpTime FROM Win32_OperatingSystem";
+            var queryString = "SELECT caption, version, CSName FROM Win32_OperatingSystem";
             var results = runQuery(queryString);
 
             var item = results.Cast<ManagementObject>().FirstOrDefault();
@@ -32,8 +32,19 @@ namespace wttop.Core {
             {
                 MachineName = item["CSName"].ToString(),
                 OSName = item["caption"].ToString(),
-                Version = item["version"].ToString(),
-                UpTime = OSInfo.ParseUpTime(item["LastBootUpTime"].ToString())
+                Version = item["version"].ToString()
+            };
+        }
+
+        public Uptime GetSystemUpTime()
+        {
+            var queryString = "SELECT LastBootUpTime FROM Win32_OperatingSystem";
+            var results = runQuery(queryString);
+
+            var item = results.Cast<ManagementObject>().FirstOrDefault();
+            return new Uptime()
+            {
+                UpTime = Uptime.ParseUpTime(item["LastBootUpTime"].ToString())
             };
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,6 +58,16 @@ namespace wttop.Core
             var disk = new Disk();
             disk.Disks = wmi.GetAllDisksActivity().ToList();
             return disk;
+        }
+
+        public Uptime GetSystemUpTime()
+        {
+            return wmi.GetSystemUpTime();
+        }
+
+        public SystemTime GetSystemDateTime()
+        {
+            return new SystemTime(DateTime.Now);
         }
     }
 }
