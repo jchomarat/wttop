@@ -1,8 +1,7 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
-using wttop.Core;
 
 namespace wttop.Widgets {
  
@@ -14,26 +13,17 @@ namespace wttop.Widgets {
         Label write;
         
         Label read;
-        
-        ISystemInfo systemInfo;
-
-        Settings settings;
 
         long valueWrite = 0;
         
         long valueRead = 0;
 
-        public DiskGraph(IServiceProvider serviceProvider)
-        {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
+        public DiskGraph(IServiceProvider serviceProvider): base(serviceProvider, false) {}
 
+        protected override void DrawWidget()
+        {
             this.Title = settings.DiskWidgetTitle;
-            DrawWidget();
-        }
-
-        void DrawWidget()
-        {
+            
             Label titleWrite = new Label("Write (kB/sec): ")
             {
                 X = 1,
@@ -71,9 +61,9 @@ namespace wttop.Widgets {
             Add(read);
         }
         
-        protected override void Update(MainLoop MainLoop)
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var disks = systemInfo.GetDiskActivity();
+            var disks = await systemInfo.GetDiskActivity();
             if (valueWrite == 0)
             {
                 // First round, don't do anything

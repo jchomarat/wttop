@@ -1,9 +1,8 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop.Core;
 
 namespace wttop.Widgets {
 
@@ -15,10 +14,6 @@ namespace wttop.Widgets {
         Label details;
         
         Bar bar;
-        
-        ISystemInfo systemInfo;
-
-        Settings settings;
 
         protected override int RefreshTimeSeconds
         {
@@ -28,17 +23,12 @@ namespace wttop.Widgets {
             }
         }
 
-        public MemoryGraph(IServiceProvider serviceProvider)
-        {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
+        public MemoryGraph(IServiceProvider serviceProvider) : base(serviceProvider, false) {}
 
+        protected override void DrawWidget()
+        {  
             this.Title = settings.MemoryWidgetTitle;
-            DrawWidget();
-        }
-
-        void DrawWidget()
-        {
+            
             Label title = new Label("Memory usage: ")
             {
                 X = 1,
@@ -64,9 +54,9 @@ namespace wttop.Widgets {
             Add(details);
         }
         
-        protected override void Update(MainLoop MainLoop)
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var memoryUsage = systemInfo.GetMemoryUsage();
+            var memoryUsage = await systemInfo.GetMemoryUsage();
             bar.Update(MainLoop, memoryUsage.PercentageUsed);
             details.Text = $"{memoryUsage.AvailableGB} GB available";
         }

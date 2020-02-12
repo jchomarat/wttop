@@ -1,8 +1,7 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
-using wttop.Core;
 
 namespace wttop.Widgets {
 
@@ -12,10 +11,6 @@ namespace wttop.Widgets {
     public class SystemTime : WidgetFrameless
     { 
         Label textLabel;
-        
-        ISystemInfo systemInfo;
-
-        Settings settings;
 
         string textTemplate = "Time: {0}";
 
@@ -27,15 +22,9 @@ namespace wttop.Widgets {
             }
         }
 
-        public SystemTime(IServiceProvider serviceProvider) : base()
-        {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
-            
-            DrawWidget();
-        }
+        public SystemTime(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
-        void DrawWidget()
+        protected override void DrawWidget()
         {
             textLabel = new Label(string.Empty)
             {
@@ -45,9 +34,10 @@ namespace wttop.Widgets {
            
             Add(textLabel);
         }
-        protected override void Update(MainLoop MainLoop)
+        
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var time = systemInfo.GetSystemDateTime();
+            var time = await systemInfo.GetSystemDateTime();
             textLabel.Text = string.Format(textTemplate, time.ToString());
         }
     }

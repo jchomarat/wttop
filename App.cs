@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Configuration;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Microsoft.Extensions.DependencyInjection;
@@ -208,14 +208,17 @@ namespace wttop
             int tick = 0;
             var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
                 // List all component to refresh
-                osInfo.RefreshIfNeeded(MainLoop, tick);
-                upTime.RefreshIfNeeded(MainLoop, tick);
-                systemTime.RefreshIfNeeded(MainLoop, tick);
-                cpuGraph.RefreshIfNeeded(MainLoop, tick);
-                memoryGraph.RefreshIfNeeded(MainLoop, tick);
-                networkGraph.RefreshIfNeeded(MainLoop, tick);
-                diskGraph.RefreshIfNeeded(MainLoop, tick);
-                processList.RefreshIfNeeded(MainLoop, tick);
+                Task.Run(async () => 
+                {
+                    await osInfo.RefreshIfNeeded(MainLoop, tick);
+                    await upTime.RefreshIfNeeded(MainLoop, tick);
+                    await systemTime.RefreshIfNeeded(MainLoop, tick);
+                    await cpuGraph.RefreshIfNeeded(MainLoop, tick);
+                    await memoryGraph.RefreshIfNeeded(MainLoop, tick);
+                    await networkGraph.RefreshIfNeeded(MainLoop, tick);
+                    await diskGraph.RefreshIfNeeded(MainLoop, tick);
+                    await processList.RefreshIfNeeded(MainLoop, tick);
+                });
                 tick ++;
                 // Every hour put it back to 0
                 if (tick > 360) tick = 1;

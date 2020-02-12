@@ -1,8 +1,7 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
-using wttop.Core;
 
 namespace wttop.Widgets {
 
@@ -14,26 +13,17 @@ namespace wttop.Widgets {
         Label upl;
         
         Label dl;
-        
-        ISystemInfo systemInfo;
-
-        Settings settings;
 
         long valueUpl = 0;
         
         long valueDl = 0;
 
-        public NetworkGraph(IServiceProvider serviceProvider)
-        {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
+        public NetworkGraph(IServiceProvider serviceProvider) : base(serviceProvider, false) {}
 
+        protected override void DrawWidget()
+        {
             this.Title = settings.NetworkWidgetTitle;
-            DrawWidget();
-        }
 
-        void DrawWidget()
-        {
             Label titleDl = new Label("Download (kB/sec): ")
             {
                 X = 1,
@@ -72,9 +62,9 @@ namespace wttop.Widgets {
 
             
         }
-        protected override void Update(MainLoop MainLoop)
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var network = systemInfo.GetNetworkStatistics();
+            var network = await systemInfo.GetNetworkStatistics();
             if (valueDl == 0)
             {
                 // First round, don't do anything

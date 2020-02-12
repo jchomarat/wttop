@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using Mono.Terminal;
@@ -12,10 +13,6 @@ namespace wttop.Widgets {
     public class Uptime : WidgetFrameless
     { 
         Label textLabel;
-        
-        ISystemInfo systemInfo;
-
-        Settings settings;
 
         string textTemplate = "Uptime: {0}";
 
@@ -27,15 +24,9 @@ namespace wttop.Widgets {
             }
         }
 
-        public Uptime(IServiceProvider serviceProvider) : base()
-        {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
-            
-            DrawWidget();
-        }
+        public Uptime(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        void DrawWidget()
+        protected override void DrawWidget()
         {
             textLabel = new Label(string.Empty)
             {
@@ -45,9 +36,10 @@ namespace wttop.Widgets {
            
             Add(textLabel);
         }
-        protected override void Update(MainLoop MainLoop)
+
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var upt = systemInfo.GetSystemUpTime();
+            var upt = await systemInfo.GetSystemUpTime();
             textLabel.Text = string.Format(textTemplate, upt.UpTimeForHuman);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace wttop.Core
 {
@@ -11,63 +12,127 @@ namespace wttop.Core
     /// </summary>
     public class WindowsDriver : ISystemInfo
     {
-        WMIWrapper wmi;
-
-        public WindowsDriver()
+        public async Task<OSInfo> GetOSInfo()
         {
-            wmi = new WMIWrapper();
+            var queryString = "SELECT caption, version, CSName FROM Win32_OperatingSystem";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.ExecuteScalar(queryString);
+
+            return new OSInfo()
+            {
+                MachineName = results["CSName"].ToString(),
+                OSName = results["caption"].ToString(),
+                Version = results["version"].ToString()
+            };
         }
 
-        public OSInfo GetOSInfo()
+        public async Task<int> GetCPUsCount()
         {
-            return wmi.GetOperatingSystemInformation();
+            var queryString = "SELECT NumberOfLogicalProcessors FROM Win32_Processor";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.ExecuteScalar(queryString);
+
+            return Convert.ToInt32(results["NumberOfLogicalProcessors"]);
         }
 
-        public int GetCPUsCount()
+        public async Task<IEnumerable<Cpu>> GetCPUsUsage()
         {
-             return wmi.GetNumberOfLogicalProcessors();
+            var queryString = "SELECT name, PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE NOT name = '_Total'";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.Execute(queryString);
+
+            return results.Select(mo => new wttop.Core.Cpu()
+                {
+                    Name = mo["name"].ToString(),
+                    PercentageUsage = int.Parse(mo["PercentProcessorTime"].ToString())
+                });
         }
 
-        //TODO Change tuple to actual object
-        public IEnumerable<Cpu> GetCPUsUsage()
+        public async Task<Memory> GetMemoryUsage()
         {
-            return wmi.GetCPUsUsage();
+            var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize FROM Win32_OperatingSystem";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.ExecuteScalar(queryString);
+
+            return new Memory()
+            {
+                AvailableKb = Convert.ToInt32(results["FreePhysicalMemory"]),
+                TotalKb = Convert.ToInt32(results["TotalVisibleMemorySize"])
+            };
         }
 
-        public Memory GetMemoryUsage()
+        public async Task<Network> GetNetworkStatistics()
         {
-            return wmi.GetMemoryUsageKb();
+            var queryString = "SELECT BytesReceivedPersec, BytesSentPersec, Name FROM Win32_PerfRawData_Tcpip_NetworkInterface";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.Execute(queryString);
+
+            return new Network()
+            {
+                Interfaces = results.Select(mo => new InterfaceDetails(){
+                                Name = mo["Name"].ToString(),
+                                BytesReceived = Convert.ToInt64(mo["BytesReceivedPersec"]),
+                                BytesSent = Convert.ToInt64(mo["BytesSentPersec"])
+                            })
+                            .ToList()
+            };
         }
 
-        public Network GetNetworkStatistics()
+        public async Task<Process> GetProcessActivity()
         {
-            var network = new Network();
-            network.Interfaces = wmi.GetNetworkInterfacesDetails().ToList();
-            return network;
+            var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase, WorkingSetPrivate FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.Execute(queryString);
+
+            return new Process()
+            {
+                Processes = results.Select(mo => new ProcessInfo(){
+                                Name = mo["Name"].ToString(),
+                                PercentProcessorTime = Convert.ToInt32(mo["PercentProcessorTime"]),
+                                IDProcess = Convert.ToInt32(mo["IDProcess"]),
+                                ThreadCount = Convert.ToInt32(mo["ThreadCount"]),
+                                HandleCount = Convert.ToInt32(mo["HandleCOunt"]),
+                                PriorityBase = Convert.ToInt32(mo["PriorityBase"]),
+                                MemoryUsageB = Convert.ToInt64(mo["WorkingSetPrivate"])
+                            })
+                            .ToList()
+            };
         }
 
-        public Process GetProcessActivity()
+        public async Task<Disk> GetDiskActivity()
         {
-            var process = new Process();
-            process.Processes = wmi.GetProcessesActivity().ToList();
-            return process;
+            var queryString = "SELECT DiskReadBytesPersec, DiskWriteBytesPersec, Name FROM Win32_PerfRawData_PerfDisk_PhysicalDisk WHERE NOT name = '_Total'";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.Execute(queryString);
+
+            return new Disk()
+            {
+                Disks = results.Select(mo => new DiskDetails(){
+                            Name = mo["Name"].ToString(),
+                            BytesRead = Convert.ToInt64(mo["DiskReadBytesPersec"]),
+                            BytesWrite = Convert.ToInt64(mo["DiskWriteBytesPersec"])
+                        })
+                        .ToList()
+            };
         }
 
-        public Disk GetDiskActivity()
+        public async Task<Uptime> GetSystemUpTime()
         {
-            var disk = new Disk();
-            disk.Disks = wmi.GetAllDisksActivity().ToList();
-            return disk;
+            var queryString = "SELECT LastBootUpTime FROM Win32_OperatingSystem";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.ExecuteScalar(queryString);
+
+            return new Uptime()
+            {
+                UpTime = Uptime.ParseUpTime(results["LastBootUpTime"].ToString())
+            };
         }
 
-        public Uptime GetSystemUpTime()
+        public Task<SystemTime> GetSystemDateTime()
         {
-            return wmi.GetSystemUpTime();
-        }
-
-        public SystemTime GetSystemDateTime()
-        {
-            return new SystemTime(DateTime.Now);
+            var tsc = new TaskCompletionSource<SystemTime>();
+            tsc.SetResult(new SystemTime(DateTime.Now));
+            return tsc.Task;
         }
     }
 }

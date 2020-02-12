@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace wttop.Core {
     
@@ -9,22 +10,22 @@ namespace wttop.Core {
     /// </summary>
     public interface ISystemInfo
     {
-        OSInfo GetOSInfo();
+        Task<OSInfo> GetOSInfo();
 
-        int GetCPUsCount();
+        Task<int> GetCPUsCount();
 
-        IEnumerable<Cpu> GetCPUsUsage();
+        Task<IEnumerable<Cpu>> GetCPUsUsage();
 
-        Memory GetMemoryUsage();
+        Task<Memory> GetMemoryUsage();
 
-        Network GetNetworkStatistics();
+        Task<Network> GetNetworkStatistics();
 
-        Process GetProcessActivity();
+        Task<Process> GetProcessActivity();
 
-        Disk GetDiskActivity();
+        Task<Disk> GetDiskActivity();
 
-        Uptime GetSystemUpTime();
+        Task<Uptime> GetSystemUpTime();
 
-        SystemTime GetSystemDateTime();
+        Task<SystemTime> GetSystemDateTime();
     }
 }
