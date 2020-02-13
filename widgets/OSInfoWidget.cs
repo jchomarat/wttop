@@ -8,7 +8,7 @@ namespace wttop.Widgets {
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
-    public class OSInfo : WidgetFrameless
+    public class OSInfoWidget : WidgetFrameless
     { 
         Label textLabel;
 
@@ -24,7 +24,7 @@ namespace wttop.Widgets {
             }
         }
 
-        public OSInfo(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        public OSInfoWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {
@@ -33,7 +33,7 @@ namespace wttop.Widgets {
                 X = 4,
                 Y = 1
             };
-            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelHeaderColor, settings.MainBackgroundColor);
+            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelWidgetHeaderColor, settings.MainBackgroundColor);
             Add(headerLabel);
 
             textLabel = new Label(string.Empty)

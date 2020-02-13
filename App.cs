@@ -115,7 +115,7 @@ namespace wttop
             win.ColorScheme = mainColorScheme;
             top.Add(win);
 
-            var osInfo = new wttop.Widgets.OSInfo(serviceProvider)
+            var osInfoWidget = new OSInfoWidget(serviceProvider)
             {
                 X = 0,
                 Y = 0,
@@ -123,9 +123,9 @@ namespace wttop
                 Height = Dim.Sized(3)
             };
 
-            win.Add(osInfo);
+            win.Add(osInfoWidget);
 
-            var upTime = new wttop.Widgets.Uptime(serviceProvider)
+            var upTimeWidget = new UptimeWidget(serviceProvider)
             {
                 X = 0,
                 Y = 1,
@@ -133,9 +133,9 @@ namespace wttop
                 Height = Dim.Sized(3)
             };
 
-            win.Add(upTime);
+            win.Add(upTimeWidget);
 
-            var systemTime = new wttop.Widgets.SystemTime(serviceProvider)
+            var systemTimeWidget = new SystemTimeWidget(serviceProvider)
             {
                 X = 0,
                 Y = 2,
@@ -143,29 +143,29 @@ namespace wttop
                 Height = Dim.Sized(3)
             };
 
-            win.Add(systemTime);
+            win.Add(systemTimeWidget);
 
-            var cpuGraph = new CPUGraphs(serviceProvider)
+            var cpuRamWidget = new CpuRamWidget(serviceProvider)
             {
                 X = 0,
-                Y = Pos.Bottom(systemTime),
+                Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Percent(50),
                 Height= Dim.Sized(18)
             };
             
-            win.Add(cpuGraph);
+            win.Add(cpuRamWidget);
 
             var viewTopRight = new View()
             {
-                X = Pos.Right(cpuGraph),
-                Y = Pos.Bottom(systemTime),
+                X = Pos.Right(cpuRamWidget),
+                Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Fill(),
                 Height= Dim.Sized(18)
             };
 
             win.Add(viewTopRight);
 
-            var memoryGraph = new MemoryGraph(serviceProvider) 
+            var networkWidget = new NetworkWidget(serviceProvider)
             {
                 X = 0,
                 Y = 0,
@@ -173,35 +173,26 @@ namespace wttop
                 Height= Dim.Sized(6)
             };
 
-            var networkGraph = new NetworkGraph(serviceProvider)
+            var diskWidget = new DiskWidget(serviceProvider)
             {
                 X = 0,
-                Y = Pos.Bottom(memoryGraph),
+                Y = Pos.Bottom(networkWidget),
                 Width = Dim.Fill(),
                 Height= Dim.Sized(6)
             };
 
-            var diskGraph = new DiskGraph(serviceProvider)
+            viewTopRight.Add(networkWidget);
+            viewTopRight.Add(diskWidget);
+
+            var processListWidget = new ProcessListWidget(serviceProvider)
             {
                 X = 0,
-                Y = Pos.Bottom(networkGraph),
-                Width = Dim.Fill(),
-                Height= Dim.Sized(6)
-            };
-
-            viewTopRight.Add(memoryGraph); 
-            viewTopRight.Add(networkGraph);
-            viewTopRight.Add(diskGraph);
-
-            var processList = new ProcessList(serviceProvider)
-            {
-                X = 0,
-                Y = Pos.Bottom(cpuGraph),
+                Y = Pos.Bottom(cpuRamWidget),
                 Width = Dim.Fill(),
                 Height= Dim.Fill()
             };
 
-            win.Add(processList);
+            win.Add(processListWidget);
 
             // Refresh section. Every second, update on all listed widget will be called
             // Each seconds the UI refreshs, but a frequency can be set by overridind the property RefreshTimeSeconds for each widdget
@@ -210,14 +201,13 @@ namespace wttop
                 // List all component to refresh
                 Task.Run(async () => 
                 {
-                    await osInfo.RefreshIfNeeded(MainLoop, tick);
-                    await upTime.RefreshIfNeeded(MainLoop, tick);
-                    await systemTime.RefreshIfNeeded(MainLoop, tick);
-                    await cpuGraph.RefreshIfNeeded(MainLoop, tick);
-                    await memoryGraph.RefreshIfNeeded(MainLoop, tick);
-                    await networkGraph.RefreshIfNeeded(MainLoop, tick);
-                    await diskGraph.RefreshIfNeeded(MainLoop, tick);
-                    await processList.RefreshIfNeeded(MainLoop, tick);
+                    await osInfoWidget.RefreshIfNeeded(MainLoop, tick);
+                    await upTimeWidget.RefreshIfNeeded(MainLoop, tick);
+                    await systemTimeWidget.RefreshIfNeeded(MainLoop, tick);
+                    await cpuRamWidget.RefreshIfNeeded(MainLoop, tick);
+                    await networkWidget.RefreshIfNeeded(MainLoop, tick);
+                    await diskWidget.RefreshIfNeeded(MainLoop, tick);
+                    await processListWidget.RefreshIfNeeded(MainLoop, tick);
                 });
                 tick ++;
                 // Every hour put it back to 0

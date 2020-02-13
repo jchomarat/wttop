@@ -19,53 +19,52 @@ namespace wttop
 
         # region Labels Widget
 
-        public Color LabelHeaderColor {get; set; } = Color.Blue;
+        public Color LabelWidgetHeaderColor {get; set; } = Color.Blue;
 
         #endregion
         
-        # region CPU Widget
+        # region CpuRam Widget
 
         // CPU widget title
-        public string CPUWidgetTitle {get; set; }= "CPU";
+        public string CpuRamWidgetTitle {get; set; }= "CPU & Memory";
 
         // Color of the CPU graph bar
-        public Color CPUBarColor {get; set; } = Color.Green;
-
-        # endregion
-
-        # region Memory widget
-
-        // Memory widget title
-        public string MemoryWidgetTitle {get; set; } = "Memory";
+        public Color CpuRamWidgetBarColor {get; set; } = Color.Green;
 
         // Color of the memory graph bar
-        public Color MemoryBarColor {get; set; } = Color.Brown;
+        public Color CpuRamWidgetRamBarColor {get; set; } = Color.Brown;
+
+        // Color of the swap memory graph bar
+        public Color CpuRamWidgetSwapBarColor {get; set; } = Color.Red;
 
         # endregion
 
         # region Network widget
 
         // Network widget title
-        public string NetworkWidgetTitle {get; set; } = "Network activity";
+        public string NetworkWidgetTitle {get; set; } = "Network";
 
         // Color of the network download value text
-        public Color NetworkDownloadTextColor {get; set;} = Color.Green;
+        public Color NetworkWidgetDownloadTextColor {get; set;} = Color.Green;
 
         // Color of the network upload value text
-        public Color NetworkUploadTextColor {get; set; } = Color.Brown;
+        public Color NetworkWidgetUploadTextColor {get; set; } = Color.Brown;
 
         # endregion        
 
         # region Disk widget
 
         // Disk widget title
-        public string DiskWidgetTitle {get; set; } = "Disk activity";
+        public string DiskWidgetTitle {get; set; } = "Disk";
 
         // Color of the disk read value text
-        public Color DiskReadTextColor {get; set; } = Color.Green;
+        public Color DiskWidgetReadTextColor {get; set; } = Color.Green;
 
         // Color of the disk write value text
-        public Color DiskWriteTextColor {get; set; } = Color.Brown;
+        public Color DiskWidgetWriteTextColor {get; set; } = Color.Brown;
+
+        // Color of the disk space usage bar
+        public Color DiskWidgetUsageBarColor {get; set; } = Color.Green;
 
         # endregion
 
@@ -75,16 +74,16 @@ namespace wttop
         public string ProcessesListWidgetTitle {get; set; } = "Processes list (top 15)";
 
         // Color of the Processes list header text
-        public Color ProcessesListHeaderTextColor {get; set; } = Color.White;
+        public Color ProcessesListWidgetHeaderTextColor {get; set; } = Color.White;
 
         // Color of the processes list header background
-        public Color ProcessesListHeaderBackgroundColor {get; set; } = Color.DarkGray;
+        public Color ProcessesListWidgetHeaderBackgroundColor {get; set; } = Color.DarkGray;
 
         // Color of the Processes list footer text
-        public Color ProcessesListFooterTextColor {get; set; } = Color.Brown;
+        public Color ProcessesListWidgetFooterTextColor {get; set; } = Color.Brown;
 
         // Color of the processes list footer background
-        public Color ProcessesListFooterBackgroundColor {get; set; } = Color.Black;
+        public Color ProcessesListWidgetFooterBackgroundColor {get; set; } = Color.Black;
 
         # endregion   
     }

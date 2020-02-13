@@ -13,7 +13,7 @@ namespace wttop.Widgets {
     /// Widget to list running processes.
     /// This class also uses Grid, a generic component that draws a grid.
     /// </summary>
-    public class ProcessList : WidgetFrame
+    public class ProcessListWidget : WidgetFrame
     { 
         Grid grid;
 
@@ -23,19 +23,19 @@ namespace wttop.Widgets {
         {
             get
             {
-                return 5;
+                return 3;
             }
         }
 
-        public ProcessList(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        public ProcessListWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {
             this.Title = settings.ProcessesListWidgetTitle;
             
             dataSource = new ProcessListDataSourceBuilder();
-            dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListHeaderTextColor, settings.ProcessesListHeaderBackgroundColor);
-            dataSource.FooterStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListFooterTextColor, settings.ProcessesListFooterBackgroundColor);
+            dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListWidgetHeaderTextColor, settings.ProcessesListWidgetHeaderBackgroundColor);
+            dataSource.FooterStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListWidgetFooterTextColor, settings.ProcessesListWidgetFooterBackgroundColor);
             grid = new Grid(dataSource)
             {
                 X = 0,
