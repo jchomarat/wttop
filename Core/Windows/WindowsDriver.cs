@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Runtime;
 using System.Threading.Tasks;
 
 namespace wttop.Core
@@ -13,6 +13,32 @@ namespace wttop.Core
     /// </summary>
     public class WindowsDriver : ISystemInfo
     {
+        int cpuCount = 0;
+
+        int diskCount = 0;
+
+        public int CpuCount
+        {
+            get
+            {
+                return cpuCount;
+            }
+        }
+
+        public int DiskCount
+        {
+            get
+            {
+                return diskCount;
+            }
+        }
+
+        public WindowsDriver()
+        {
+            cpuCount = Environment.ProcessorCount;
+            diskCount = DriveInfo.GetDrives().Length;
+        }
+
         public async Task<OSInfo> GetOSInfo()
         {
             var queryString = "SELECT caption, version, CSName FROM Win32_OperatingSystem";
@@ -25,11 +51,6 @@ namespace wttop.Core
                 OSName = results["caption"].ToString(),
                 Version = results["version"].ToString()
             };
-        }
-
-        public int GetCPUsCount()
-        {
-            return Environment.ProcessorCount;
         }
 
         public async Task<IEnumerable<Cpu>> GetCPUsUsage()
@@ -126,6 +147,21 @@ namespace wttop.Core
                         })
                         .ToList()
             };
+        }
+
+        public async Task<IEnumerable<Storage>> GetDiskStorageInfo()
+        {
+            var queryString = "SELECT VolumeName, Caption, FreeSpace, Size FROM Win32_logicaldisk";
+            var wmiReader = new WmiReader();
+            var results = await wmiReader.Execute(queryString);
+            
+            return results.Select(mo => new Storage()
+                {
+                    VolumeCaption = mo["Caption"].ToString(),
+                    VolumeName = mo["VolumeName"].ToString(),
+                    AvailableKb = Convert.ToInt64(mo["FreeSpace"]),
+                    TotalKb = Convert.ToInt64(mo["Size"])
+                });
         }
 
         public async Task<Uptime> GetSystemUpTime()

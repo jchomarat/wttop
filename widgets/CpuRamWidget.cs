@@ -33,7 +33,7 @@ namespace wttop.Widgets {
             this.Title = settings.CpuRamWidgetTitle;
             
             // CPU part
-            var maxCpusCount = systemInfo.GetCPUsCount();     
+            var maxCpusCount = systemInfo.CpuCount;     
             cpus = new Label[maxCpusCount];
             bars = new Bar[maxCpusCount];
             var offsetY = 1;
@@ -125,16 +125,15 @@ namespace wttop.Widgets {
             };
 
             // Memory refresh does not neet to be refreshed at the same pace, use cycle
-
             if (cycle == 0 || cycle == 59)
             {
                 // First iteration, or one minute
                 var memoryUsage = await systemInfo.GetMemoryUsage();
                 ramBar.Update(MainLoop, memoryUsage.PercentageUsed);
-                ramDetails.Text = $"[{memoryUsage.AvailableGB} GB available]";
+                ramDetails.Text = $"({memoryUsage.AvailableGB} GB available)";
 
                 swapBar.Update(MainLoop, memoryUsage.PercentageSwapAvailable);
-                swapDetails.Text = $"[{memoryUsage.AvailableSwapGB} GB available]";
+                swapDetails.Text = $"({memoryUsage.AvailableSwapGB} GB available)";
 
                 if (cycle == 59)
                     cycle = 0;
