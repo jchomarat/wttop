@@ -178,7 +178,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(networkWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(6)
+                Height= Dim.Fill()
             };
 
             viewTopRight.Add(networkWidget);

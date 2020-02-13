@@ -13,7 +13,7 @@ namespace wttop.Widgets.Common {
         
         protected abstract void UpdateAction(T newValue);
 
-        public virtual bool Update(MainLoop MainLoop, T newValue)
+        public bool Update(MainLoop MainLoop, T newValue)
         {
             MainLoop.Invoke(() => {
                 UpdateAction(newValue);

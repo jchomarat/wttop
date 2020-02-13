@@ -64,7 +64,7 @@ namespace wttop
         public Color DiskWidgetWriteTextColor {get; set; } = Color.Brown;
 
         // Color of the disk space usage bar
-        public Color DiskWidgetUsageBarColor {get; set; } = Color.Green;
+        public Color DiskWidgetUsageBarColor {get; set; } = Color.Magenta;
 
         # endregion
 

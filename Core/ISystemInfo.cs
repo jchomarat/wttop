@@ -10,9 +10,13 @@ namespace wttop.Core {
     /// </summary>
     public interface ISystemInfo
     {
-        Task<OSInfo> GetOSInfo();
+        // During init of the UI, we need to know how many CPUs and disks we have, so these properties
+        // must be instantiate on the driver instantiation
+        int CpuCount { get; }
 
-        int GetCPUsCount();
+        int DiskCount{ get; }
+
+        Task<OSInfo> GetOSInfo();
 
         Task<IEnumerable<Cpu>> GetCPUsUsage();
 
@@ -23,6 +27,8 @@ namespace wttop.Core {
         Task<Process> GetProcessActivity();
 
         Task<Disk> GetDiskActivity();
+
+        Task<IEnumerable<Storage>> GetDiskStorageInfo();
 
         Task<Uptime> GetSystemUpTime();
 
