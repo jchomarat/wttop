@@ -8,7 +8,7 @@ namespace wttop.Widgets {
     /// <summary>
     /// Widget that will display the disk graph
     /// </summary>
-    public class DiskGraph : WidgetFrame
+    public class DiskWidget : WidgetFrame
     { 
         Label write;
         
@@ -18,7 +18,7 @@ namespace wttop.Widgets {
         
         long valueRead = 0;
 
-        public DiskGraph(IServiceProvider serviceProvider): base(serviceProvider) {}
+        public DiskWidget(IServiceProvider serviceProvider): base(serviceProvider) {}
 
         protected override void DrawWidget()
         {
@@ -38,11 +38,11 @@ namespace wttop.Widgets {
                 Y = 1
             };
             
-            write.TextColor = Terminal.Gui.Attribute.Make(settings.DiskWriteTextColor, settings.MainBackgroundColor);
+            write.TextColor = Terminal.Gui.Attribute.Make(settings.DiskWidgetWriteTextColor, settings.MainBackgroundColor);
 
             Add(write);            
             
-            Label titleRead = new Label("Read (kB/sec): ")
+            Label titleRead = new Label("Read (kB/sec) : ")
             {
                 X = 1,
                 Y = Pos.Bottom(titleWrite)
@@ -56,7 +56,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(write)
             };
 
-            read.TextColor = Terminal.Gui.Attribute.Make(settings.DiskReadTextColor, settings.MainBackgroundColor);
+            read.TextColor = Terminal.Gui.Attribute.Make(settings.DiskWidgetReadTextColor, settings.MainBackgroundColor);
            
             Add(read);
         }

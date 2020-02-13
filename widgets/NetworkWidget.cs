@@ -8,7 +8,7 @@ namespace wttop.Widgets {
     /// <summary>
     /// Widget that will display the network graph
     /// </summary>
-    public class NetworkGraph : WidgetFrame
+    public class NetworkWidget : WidgetFrame
     { 
         Label upl;
         
@@ -18,7 +18,7 @@ namespace wttop.Widgets {
         
         long valueDl = 0;
 
-        public NetworkGraph(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        public NetworkWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {
@@ -38,11 +38,11 @@ namespace wttop.Widgets {
                 Y = 1
             };
 
-            dl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkDownloadTextColor, settings.MainBackgroundColor);
+            dl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetDownloadTextColor, settings.MainBackgroundColor);
            
             Add(dl);
 
-            Label titleUpl = new Label("Upload (kB/sec): ")
+            Label titleUpl = new Label("Upload (kB/sec)  : ")
             {
                 X = 1,
                 Y = Pos.Bottom(titleDl)
@@ -56,7 +56,7 @@ namespace wttop.Widgets {
                 Y = Pos.Bottom(dl)
             };
 
-            upl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkUploadTextColor, settings.MainBackgroundColor);
+            upl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetUploadTextColor, settings.MainBackgroundColor);
 
             Add(upl);
 

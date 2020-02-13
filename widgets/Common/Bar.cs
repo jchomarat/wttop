@@ -29,7 +29,7 @@ namespace wttop.Widgets.Common
 
             Label closingBraquet = new Label("]")
             {
-                X = Pos.AnchorEnd(5),
+                X = Pos.AnchorEnd(7),
                 Y = 0
             };
 
@@ -39,7 +39,7 @@ namespace wttop.Widgets.Common
             {
                 X = Pos.Right(openingBraquet),
                 Y = 0,
-                Width = Dim.Fill(5)
+                Width = Dim.Fill(7)
             };
 
             percentBar.TextColor = Terminal.Gui.Attribute.Make(BarColor, BackgroundColor);
@@ -49,7 +49,7 @@ namespace wttop.Widgets.Common
             percentText = new Label(string.Empty)
             {
                 X = Pos.Right(closingBraquet),
-                Y = 0
+                Y = 0,
             };
 
             Add(percentText);
@@ -61,12 +61,12 @@ namespace wttop.Widgets.Common
         /// </summary>
         /// <param name="newValue"></param>
         protected override void UpdateAction(float newValue)
-        {
-           percentText.Text = $" {newValue} %   ";
-           // Get the label that acts as progress bar width, to calculate how many | to write
-           var lblWidth = percentBar.Bounds.Width;
-           int charCount = (int)Math.Floor((newValue*lblWidth)/100);
-           percentBar.Text = new string(barChar, charCount);
+        {            
+            percentText.Text = $" {newValue} % ";
+            // Get the label that acts as progress bar width, to calculate how many | to write
+            var lblWidth = percentBar.Bounds.Width;
+            int charCount = (int)Math.Floor((newValue*lblWidth)/100);
+            percentBar.Text = new string(barChar, charCount);
         }
     }
 }

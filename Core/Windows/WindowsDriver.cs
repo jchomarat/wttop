@@ -60,14 +60,16 @@ namespace wttop.Core
 
         public async Task<Memory> GetMemoryUsage()
         {
-            var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize FROM Win32_OperatingSystem";
+            var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize, FreeVirtualMemory, TotalVirtualMemorySize FROM Win32_OperatingSystem";
             var wmiReader = new WmiReader();
             var results = await wmiReader.ExecuteScalar(queryString);
 
             return new Memory()
             {
                 AvailableKb = Convert.ToInt32(results["FreePhysicalMemory"]),
-                TotalKb = Convert.ToInt32(results["TotalVisibleMemorySize"])
+                TotalKb = Convert.ToInt32(results["TotalVisibleMemorySize"]),
+                AvailableSwapKb = Convert.ToInt32(results["FreeVirtualMemory"]),
+                TotalSwapKb = Convert.ToInt32(results["TotalVirtualMemorySize"])
             };
         }
 

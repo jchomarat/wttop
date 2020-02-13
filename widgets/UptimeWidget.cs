@@ -8,11 +8,11 @@ namespace wttop.Widgets {
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
-    public class SystemTime : WidgetFrameless
+    public class UptimeWidget : WidgetFrameless
     { 
         Label textLabel;
 
-        string headerText = "System time: ";
+        string headerText = "Uptime: ";
         
         string contentTemplate = "{0}";
 
@@ -20,11 +20,11 @@ namespace wttop.Widgets {
         {
             get
             {
-                return 1;
+                return 60;
             }
         }
 
-        public SystemTime(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        public UptimeWidget(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         protected override void DrawWidget()
         {
@@ -33,7 +33,7 @@ namespace wttop.Widgets {
                 X = 4,
                 Y = 1
             };
-            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelHeaderColor, settings.MainBackgroundColor);
+            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelWidgetHeaderColor, settings.MainBackgroundColor);
             Add(headerLabel);
 
             textLabel = new Label(string.Empty)
@@ -44,11 +44,11 @@ namespace wttop.Widgets {
            
             Add(textLabel);
         }
-        
+
         protected override async Task Update(MainLoop MainLoop)
         {
-            var time = await systemInfo.GetSystemDateTime();
-            textLabel.Text = string.Format(contentTemplate, time.ToString());
+            var upt = await systemInfo.GetSystemUpTime();
+            textLabel.Text = string.Format(contentTemplate, upt.UpTimeForHuman);
         }
     }
 }
