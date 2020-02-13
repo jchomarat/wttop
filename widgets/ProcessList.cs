@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
 using wttop.Core;
@@ -18,22 +18,21 @@ namespace wttop.Widgets {
         Grid grid;
 
         ProcessListDataSourceBuilder dataSource;
-        
-        ISystemInfo systemInfo;
 
-        Settings settings;
-
-        public ProcessList(IServiceProvider serviceProvider)
+        protected override int RefreshTimeSeconds
         {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
-
-            this.Title = settings.ProcessesListWidgetTitle;
-            DrawWidget();
+            get
+            {
+                return 5;
+            }
         }
 
-        void DrawWidget()
+        public ProcessList(IServiceProvider serviceProvider) : base(serviceProvider) {}
+
+        protected override void DrawWidget()
         {
+            this.Title = settings.ProcessesListWidgetTitle;
+            
             dataSource = new ProcessListDataSourceBuilder();
             dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListHeaderTextColor, settings.ProcessesListHeaderBackgroundColor);
             dataSource.FooterStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListFooterTextColor, settings.ProcessesListFooterBackgroundColor);
@@ -48,11 +47,10 @@ namespace wttop.Widgets {
             Add(grid);
         }
 
-        protected override void Update(MainLoop MainLoop)
+        protected override async Task Update(MainLoop MainLoop)
         {
-            var processList = systemInfo.GetProcessActivity();
+            var processList = await systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
-
             grid.Update(MainLoop, processList.GetTop15.ToList());
         }
     }

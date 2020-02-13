@@ -1,11 +1,9 @@
 using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using wttop.Widgets.Common;
 using Mono.Terminal;
-using wttop;
-using wttop.Core;
 
 namespace wttop.Widgets {
 
@@ -14,27 +12,17 @@ namespace wttop.Widgets {
     /// </summary>
     public class CPUGraphs : WidgetFrame
     {    
-        Label[] cpus;
+        Label[] cpus = null;
         
-        Bar[] bars;
-        
-        ISystemInfo systemInfo;
+        Bar[] bars = null;
 
-        Settings settings;
+        public CPUGraphs(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
-        public CPUGraphs(IServiceProvider serviceProvider)
+        protected override void DrawWidget()
         {
-            systemInfo = serviceProvider.GetService<ISystemInfo>();
-            settings = serviceProvider.GetService<Settings>();
-
             this.Title = settings.CPUWidgetTitle;
-            DrawWidget();
-        }
-
-        void DrawWidget()
-        {
-            var maxCpusCount = systemInfo.GetCPUsCount();
             
+            var maxCpusCount = systemInfo.GetCPUsCount();     
             cpus = new Label[maxCpusCount];
             bars = new Bar[maxCpusCount];
             var offsetY = 1;
@@ -55,14 +43,14 @@ namespace wttop.Widgets {
 
                 offsetY += 1;
             }
-        
+
             Add(cpus);
             Add(bars);
         }
 
-        protected override void Update(MainLoop MainLoop)
-        {
-            var cpusUsage = systemInfo.GetCPUsUsage();
+        protected override async Task Update(MainLoop MainLoop)
+        {                
+            var cpusUsage = await systemInfo.GetCPUsUsage();
             for (var i = 0; i < bars.Length; i++)
             {
                 bars[i].Update(MainLoop, cpusUsage.ElementAt(i).PercentageUsage);
