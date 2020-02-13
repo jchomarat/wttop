@@ -16,6 +16,12 @@ namespace wttop
         public Color MainBackgroundColor {get; set; } = Color.Black;
 
         # endregion
+
+        # region Labels Widget
+
+        public Color LabelHeaderColor {get; set; } = Color.Blue;
+
+        #endregion
         
         # region CPU Widget
 

@@ -12,7 +12,9 @@ namespace wttop.Widgets {
     { 
         Label textLabel;
 
-        string textTemplate = "Operating system: {0} on {1} (version {2})";
+        string headerText = "Operating system: ";
+        
+        string contentTemplate = "{0} on {1} (version {2})";
 
         protected override int RefreshTimeSeconds
         {
@@ -26,9 +28,17 @@ namespace wttop.Widgets {
 
         protected override void DrawWidget()
         {
-            textLabel = new Label(string.Empty)
+            var headerLabel = new Label(headerText)
             {
                 X = 4,
+                Y = 1
+            };
+            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelHeaderColor, settings.MainBackgroundColor);
+            Add(headerLabel);
+
+            textLabel = new Label(string.Empty)
+            {
+                X = Pos.Right(headerLabel),
                 Y = 1
             };
            
@@ -38,7 +48,7 @@ namespace wttop.Widgets {
         protected override async Task Update(MainLoop MainLoop)
         {
             var osInfo = await systemInfo.GetOSInfo();
-            textLabel.Text = string.Format(textTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
+            textLabel.Text = string.Format(contentTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
         }
     }
 }

@@ -34,7 +34,6 @@ namespace wttop.Widgets
         {
             systemInfo = serviceProvider.GetService<ISystemInfo>();
             settings = serviceProvider.GetService<Settings>();
-
             Draw();
         }
 

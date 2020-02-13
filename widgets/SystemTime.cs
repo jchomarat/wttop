@@ -12,7 +12,9 @@ namespace wttop.Widgets {
     { 
         Label textLabel;
 
-        string textTemplate = "Time: {0}";
+        string headerText = "System time: ";
+        
+        string contentTemplate = "{0}";
 
         protected override int RefreshTimeSeconds
         {
@@ -26,9 +28,17 @@ namespace wttop.Widgets {
 
         protected override void DrawWidget()
         {
-            textLabel = new Label(string.Empty)
+            var headerLabel = new Label(headerText)
             {
                 X = 4,
+                Y = 1
+            };
+            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelHeaderColor, settings.MainBackgroundColor);
+            Add(headerLabel);
+
+            textLabel = new Label(string.Empty)
+            {
+                X = Pos.Right(headerLabel),
                 Y = 1
             };
            
@@ -38,7 +48,7 @@ namespace wttop.Widgets {
         protected override async Task Update(MainLoop MainLoop)
         {
             var time = await systemInfo.GetSystemDateTime();
-            textLabel.Text = string.Format(textTemplate, time.ToString());
+            textLabel.Text = string.Format(contentTemplate, time.ToString());
         }
     }
 }

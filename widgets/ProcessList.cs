@@ -19,6 +19,14 @@ namespace wttop.Widgets {
 
         ProcessListDataSourceBuilder dataSource;
 
+        protected override int RefreshTimeSeconds
+        {
+            get
+            {
+                return 5;
+            }
+        }
+
         public ProcessList(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()

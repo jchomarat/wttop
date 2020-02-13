@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Terminal.Gui;
 using Mono.Terminal;
-using wttop.Core;
 
 namespace wttop.Widgets {
 
@@ -14,7 +12,9 @@ namespace wttop.Widgets {
     { 
         Label textLabel;
 
-        string textTemplate = "Uptime: {0}";
+        string headerText = "Uptime: ";
+        
+        string contentTemplate = "{0}";
 
         protected override int RefreshTimeSeconds
         {
@@ -28,9 +28,17 @@ namespace wttop.Widgets {
 
         protected override void DrawWidget()
         {
-            textLabel = new Label(string.Empty)
+            var headerLabel = new Label(headerText)
             {
                 X = 4,
+                Y = 1
+            };
+            headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelHeaderColor, settings.MainBackgroundColor);
+            Add(headerLabel);
+
+            textLabel = new Label(string.Empty)
+            {
+                X = Pos.Right(headerLabel),
                 Y = 1
             };
            
@@ -40,7 +48,7 @@ namespace wttop.Widgets {
         protected override async Task Update(MainLoop MainLoop)
         {
             var upt = await systemInfo.GetSystemUpTime();
-            textLabel.Text = string.Format(textTemplate, upt.UpTimeForHuman);
+            textLabel.Text = string.Format(contentTemplate, upt.UpTimeForHuman);
         }
     }
 }
