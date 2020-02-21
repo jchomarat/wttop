@@ -8,26 +8,15 @@ namespace wttop.Core {
     {
         public string Name {get; set; }
 
-        public int PercentProcessorTime {get; set; }
+        public double PercentProcessorTime {get; set; }
 
         public int IDProcess {get; set; }
 
+        public string Owner {get; set;}
+
         public int ThreadCount {get; set; }
 
-        public int HandleCount {get; set; }
-
-        public long MemoryUsageB {get; set; }
-
-        public double MemoryUsageMB
-        {
-            get
-            {
-                double d = MemoryUsageB/1024.0/1024.0;
-                return Math.Round(d, 1);
-            }
-        }
-
-        public int PriorityBase {get; set; }
+        public long MemoryUsageMb {get; set; }
     }
 
     public class Process

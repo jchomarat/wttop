@@ -12,16 +12,18 @@ namespace wttop.Core {
         public Task<ManagementBaseObject> ExecuteScalar(string QueryString)
         {
             var tsc = new TaskCompletionSource<ManagementBaseObject>();
-            var searcher = new ManagementObjectSearcher(QueryString);
-            ManagementOperationObserver results = new ManagementOperationObserver();
+            using (var searcher = new ManagementObjectSearcher(QueryString))
+            {
+                ManagementOperationObserver results = new ManagementOperationObserver();
 
-            results.ObjectReady += (s, e) => {
-                tsc.SetResult(e.NewObject);
-            };
+                results.ObjectReady += (s, e) => {
+                    tsc.SetResult(e.NewObject);
+                };
 
-             searcher.Get(results);
+                searcher.Get(results);
 
-             return tsc.Task;
+                return tsc.Task;
+            }
         }
 
         public Task<List<ManagementBaseObject>> Execute(string QueryString)
@@ -29,20 +31,22 @@ namespace wttop.Core {
             var tsc = new TaskCompletionSource<List<ManagementBaseObject>>();
             var items = new List<ManagementBaseObject>();
 
-            var searcher = new ManagementObjectSearcher(QueryString);
-            ManagementOperationObserver results = new ManagementOperationObserver();
+            using (var searcher = new ManagementObjectSearcher(QueryString))
+            {
+                ManagementOperationObserver results = new ManagementOperationObserver();
 
-            results.ObjectReady += (s, e) => {
-                items.Add(e.NewObject);
-            };
+                results.ObjectReady += (s, e) => {
+                    items.Add(e.NewObject);
+                };
 
-            results.Completed += (s, e) => {
-                tsc.SetResult(items);
-            };
+                results.Completed += (s, e) => {
+                    tsc.SetResult(items);
+                };
 
-             searcher.Get(results);
+                searcher.Get(results);
 
-             return tsc.Task;
+                return tsc.Task;
+            }
         }
     }
 }

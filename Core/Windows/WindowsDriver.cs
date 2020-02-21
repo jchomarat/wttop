@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace wttop.Core
@@ -13,6 +15,10 @@ namespace wttop.Core
     /// </summary>
     public class WindowsDriver : ISystemInfo
     {
+        CpuUtilizationReader cpuUtilizationReader;
+
+        ProcessesReader processReader;
+
         int cpuCount = 0;
 
         int diskCount = 0;
@@ -37,6 +43,12 @@ namespace wttop.Core
         {
             cpuCount = Environment.ProcessorCount;
             diskCount = DriveInfo.GetDrives().Length;
+
+            cpuUtilizationReader = new CpuUtilizationReader();
+            // Do an initial reading
+            int c = cpuUtilizationReader.CurrentUtilization;
+
+            processReader = new ProcessesReader();
         }
 
         public async Task<OSInfo> GetOSInfo()
@@ -66,32 +78,45 @@ namespace wttop.Core
                 });
         }
 
-        public async Task<Cpu> GetTotalCpuUsage()
+        public Task<Cpu> GetTotalCpuUsage()
         {
-            var queryString = "SELECT PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor WHERE name = '_Total'";
-            var wmiReader = new WmiReader();
-            var results = await wmiReader.ExecuteScalar(queryString);
-
-            return new Cpu()
+            var tsc = new TaskCompletionSource<Cpu>();
+            var cpu = new Cpu()
             {
                 Name = "Total",
-                PercentageUsage = int.Parse(results["PercentProcessorTime"].ToString())
+                PercentageUsage = cpuUtilizationReader.CurrentUtilization
             };
+
+            tsc.SetResult(cpu);
+            return tsc.Task;
+
         }
 
-        public async Task<Memory> GetMemoryUsage()
+        public Task<Memory> GetMemoryUsage()
         {
-            var queryString = "SELECT FreePhysicalMemory, TotalVisibleMemorySize, FreeVirtualMemory, TotalVirtualMemorySize FROM Win32_OperatingSystem";
-            var wmiReader = new WmiReader();
-            var results = await wmiReader.ExecuteScalar(queryString);
+            var tsc = new TaskCompletionSource<Memory>();
+            var memory = new Memory();
 
-            return new Memory()
+            Kernel32.MEMORYSTATUSEX memoryStatusEx = new Kernel32.MEMORYSTATUSEX();
+            if (!Kernel32.GlobalMemoryStatusEx(memoryStatusEx))
             {
-                AvailableKb = Convert.ToInt32(results["FreePhysicalMemory"]),
-                TotalKb = Convert.ToInt32(results["TotalVisibleMemorySize"]),
-                AvailableSwapKb = Convert.ToInt32(results["FreeVirtualMemory"]),
-                TotalSwapKb = Convert.ToInt32(results["TotalVirtualMemorySize"])
-            };
+                int error = Marshal.GetLastWin32Error();
+                var exception = new Win32Exception("Could not retrieve the global memory status");
+                throw exception;
+            }
+            else
+            {
+                memory.PhysicalPercentageUsed = (int)memoryStatusEx.dwMemoryLoad;
+                memory.PhysicalTotalGb = Convert.ToInt32(memoryStatusEx.ullTotalPhys/1024/1024/1024);
+                memory.PhysicalAvailableGb = Convert.ToInt32(memoryStatusEx.ullAvailPhys/1024/1024/1024);
+
+                memory.SwapAvailableGb = Convert.ToInt32(memoryStatusEx.ullAvailVirtual/1024/1024/1024);
+                memory.SwapTotalGb = Convert.ToInt32(memoryStatusEx.ullTotalVirtual/1024/1024/1024);
+                memory.SwapPercentageUsed = (int)Math.Round((decimal)((memory.SwapTotalGb - memory.SwapAvailableGb)*100)/memory.SwapTotalGb, 0);
+            }
+
+            tsc.SetResult(memory);
+            return tsc.Task;
         }
 
         public async Task<Network> GetNetworkStatistics()
@@ -111,25 +136,30 @@ namespace wttop.Core
             };
         }
 
-        public async Task<Process> GetProcessActivity()
+        public Task<Process> GetProcessActivity()
         {
-            var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase, WorkingSetPrivate FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
-            var wmiReader = new WmiReader();
-            var results = await wmiReader.Execute(queryString);
+            // var queryString = "SELECT Name, PercentProcessorTime, IDProcess, ThreadCount, HandleCOunt, PriorityBase, WorkingSetPrivate FROM Win32_PerfFormattedData_PerfProc_Process WHERE IDProcess > 0";
+            // var wmiReader = new WmiReader();
+            // var results = await wmiReader.Execute(queryString);
+            
+            var tsc = new TaskCompletionSource<Process>();
+            var pws = processReader.Refresh();
 
-            return new Process()
+            var p = new Process()
             {
-                Processes = results.Select(mo => new ProcessInfo(){
-                                Name = mo["Name"].ToString(),
-                                PercentProcessorTime = Convert.ToInt32(mo["PercentProcessorTime"]),
-                                IDProcess = Convert.ToInt32(mo["IDProcess"]),
-                                ThreadCount = Convert.ToInt32(mo["ThreadCount"]),
-                                HandleCount = Convert.ToInt32(mo["HandleCOunt"]),
-                                PriorityBase = Convert.ToInt32(mo["PriorityBase"]),
-                                MemoryUsageB = Convert.ToInt64(mo["WorkingSetPrivate"])
+                Processes = pws.Select(pw => new ProcessInfo(){
+                                Name = pw.Name,
+                                PercentProcessorTime = pw.CpuUsage,
+                                IDProcess = pw.Pid,
+                                Owner = pw.UserName,
+                                ThreadCount = pw.ThreadCount,
+                                MemoryUsageMb = pw.MemoryUsageMB
                             })
                             .ToList()
             };
+
+            tsc.SetResult(p);
+            return tsc.Task;
         }
 
         public async Task<Disk> GetDiskActivity()
@@ -154,7 +184,7 @@ namespace wttop.Core
             var queryString = "SELECT VolumeName, Caption, FreeSpace, Size FROM Win32_logicaldisk";
             var wmiReader = new WmiReader();
             var results = await wmiReader.Execute(queryString);
-            
+
             return results.Select(mo => new Storage()
                 {
                     VolumeCaption = mo["Caption"].ToString(),

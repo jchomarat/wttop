@@ -79,10 +79,10 @@ namespace wttop.Widgets {
             return new string[] {
                 "Name", 
                 "ID", 
-                "CPU%", 
+                "CPU% |", 
                 "Memory(MB)",
                 "ThreadCount",  
-                "Priority"
+                "Owner"
             };
         }
 
@@ -115,9 +115,9 @@ namespace wttop.Widgets {
                 p.Name,
                 p.IDProcess.ToString(),
                 p.PercentProcessorTime.ToString(),
-                p.MemoryUsageMB.ToString(),
+                p.MemoryUsageMb.ToString(),
                 p.ThreadCount.ToString(),
-                p.PriorityBase.ToString()
+                p.Owner
             };
         }
 
