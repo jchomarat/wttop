@@ -13,10 +13,8 @@ namespace wttop.Widgets {
     public class CpuRamWidget : WidgetFrame
     {    
         int cycle = 0;
-
-        Label[] cpus = null;
         
-        Bar[] bars = null;
+        Bar cpuBar;
 
         Bar ramBar;
 
@@ -33,38 +31,29 @@ namespace wttop.Widgets {
             this.Title = settings.CpuRamWidgetTitle;
             
             // CPU part
-            var maxCpusCount = systemInfo.CpuCount;     
-            cpus = new Label[maxCpusCount];
-            bars = new Bar[maxCpusCount];
-            var offsetY = 1;
-            for (var i = 0; i < maxCpusCount; i++)
-            {    
-                cpus[i] = new Label($"cpu-{i}: ") {
-                        X = 1,
-                        Y = offsetY
-                    };
+            Label cpuTitle = new Label("CPU : ")
+            {
+                X = 1,
+                Y = 1
+            };
 
-                bars[i] = 
-                    new Bar(settings.CpuRamWidgetBarColor, settings.MainBackgroundColor){
-                        X = Pos.Right(cpus[i]),
-                        Y = offsetY,
-                        Width = Dim.Percent(75),
-                        Height= Dim.Sized(1)
-                    };
+            Add(cpuTitle);
+            
+            cpuBar = new Bar(settings.CpuRamWidgetBarColor, settings.MainBackgroundColor)
+            {
+                X = Pos.Right(cpuTitle),
+                Y = 1,
+                Width = Dim.Percent(75),
+                Height= Dim.Sized(1)
+            };
 
-                offsetY += 1;
-            }
-
-            Add(cpus);
-            Add(bars);
+            Add(cpuBar);
 
             // Memory part
-            offsetY += 2;
-
             Label ramTitle = new Label("RAM : ")
             {
                 X = 1,
-                Y = offsetY
+                Y = 3
             };
 
             Add(ramTitle);
@@ -72,7 +61,7 @@ namespace wttop.Widgets {
             ramBar = new Bar(settings.CpuRamWidgetRamBarColor, settings.MainBackgroundColor)
             {
                 X = Pos.Right(ramTitle),
-                Y = offsetY,
+                Y = 3,
                 Width = Dim.Percent(30),
                 Height= Dim.Sized(1)
             };
@@ -82,17 +71,15 @@ namespace wttop.Widgets {
             ramDetails = new Label(string.Empty)
             {
                 X = Pos.Right(ramBar),
-                Y = offsetY
+                Y = 3
             };
             
             Add(ramDetails);
 
-            offsetY += 1;
-
             Label swapTitle = new Label("Swap: ")
             {
                 X = 1,
-                Y = offsetY
+                Y = 4
             };
 
             Add(swapTitle);
@@ -100,7 +87,7 @@ namespace wttop.Widgets {
             swapBar = new Bar(settings.CpuRamWidgetSwapBarColor, settings.MainBackgroundColor)
             {
                 X = Pos.Right(swapTitle),
-                Y = offsetY,
+                Y = 4,
                 Width = Dim.Percent(30),
                 Height= Dim.Sized(1)
             };
@@ -110,7 +97,7 @@ namespace wttop.Widgets {
             swapDetails = new Label(string.Empty)
             {
                 X = Pos.Right(swapBar),
-                Y = offsetY
+                Y = 4
             };
             
             Add(swapDetails);
@@ -118,22 +105,19 @@ namespace wttop.Widgets {
 
         protected override async Task Update(MainLoop MainLoop)
         {             
-            var cpusUsage = await systemInfo.GetCPUsUsage();
-            for (var i = 0; i < bars.Length; i++)
-            {
-                bars[i].Update(MainLoop, cpusUsage.ElementAt(i).PercentageUsage);
-            };
+            var cpusUsage = await systemInfo.GetTotalCpuUsage();
+            cpuBar.Update(MainLoop, cpusUsage.PercentageUsage);
 
             // Memory refresh does not neet to be refreshed at the same pace, use cycle
             if (cycle == 0 || cycle == 59)
             {
                 // First iteration, or one minute
                 var memoryUsage = await systemInfo.GetMemoryUsage();
-                ramBar.Update(MainLoop, memoryUsage.PercentageUsed);
-                ramDetails.Text = $"({memoryUsage.AvailableGB} GB available)";
+                ramBar.Update(MainLoop, memoryUsage.PhysicalPercentageUsed);
+                ramDetails.Text = $"({memoryUsage.PhysicalAvailableGb} GB available)";
 
-                swapBar.Update(MainLoop, memoryUsage.PercentageSwapAvailable);
-                swapDetails.Text = $"({memoryUsage.AvailableSwapGB} GB available)";
+                swapBar.Update(MainLoop, memoryUsage.SwapPercentageUsed);
+                swapDetails.Text = $"({memoryUsage.SwapAvailableGb} GB available)";
 
                 if (cycle == 59)
                     cycle = 0;

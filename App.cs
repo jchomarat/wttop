@@ -16,50 +16,33 @@ namespace wttop
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                // No args, launch the app
-                StartApp();
-            }
-            else
-            {
-                HandleCommandArgs(args);
-            }
-        }
-
-        /// <summary>
-        /// Parse command line arguments
-        /// </summary>
-        /// <param name="args">Argumenrs array passed to the exe.</param>
-        static void HandleCommandArgs(string[] args)
-        {
-            if (args[0] == "-h" || args[0] == "--help")
-            {
-                ShowHelp();
-            }
-            else
-            {
-                Console.WriteLine("Invalid command.");
-                ShowHelp();
-            }
+            StartApp();
         }
 
         /// <summary>
         /// Display the help and the about
         /// </summary>
-        static void ShowHelp()
+        static Dialog AboutDialog()
         {
-            Console.WriteLine("");
-            Console.WriteLine(" WTTOP: the new Windows Terminal system monitor");
-            Console.WriteLine("   Author:  Julien Chomarat (https://github.com/jchomarat)");
-            Console.WriteLine("   Version: 1.1");
-            Console.WriteLine("   Licence: MIT");
-            Console.WriteLine("");
-            Console.WriteLine(" Usage: wttop [options]");
-            Console.WriteLine("");
-            Console.WriteLine(" Options:");
-            Console.WriteLine("    -h, --help    Show this help");
-            Console.WriteLine("");
+            var about = new Dialog("WTTOP: The New Windows Terminal System Monitor", 60, 10, null);
+            about.Add(
+                new Label("Version: 1.1")
+                {
+                    X = 2,
+                    Y = 1
+                },
+                new Label("Author: Julien Chomarat (https://github.com/jchomarat)")
+                {
+                    X = 2,
+                    Y = 2
+                },
+                new Label("Licence: MIT")
+                {
+                    X = 2,
+                    Y = 3
+                }
+            );
+            return about;
         }
 
         /// <summary>
@@ -104,7 +87,7 @@ namespace wttop
             mainColorScheme.SetColorsForAllStates(settings.MainForegroundColor, settings.MainBackgroundColor);
 
             // Creates the top-level window to show
-            var win = new Window(settings.MainAppTitle)
+            var win = new WttopWindow(settings.MainAppTitle)
             {
                 X = 0,
                 Y = 0,
@@ -120,7 +103,8 @@ namespace wttop
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height = Dim.Sized(3)
+                Height = Dim.Sized(3),
+                CanFocus = false
             };
 
             win.Add(osInfoWidget);
@@ -130,7 +114,8 @@ namespace wttop
                 X = 0,
                 Y = 1,
                 Width = Dim.Fill(),
-                Height = Dim.Sized(3)
+                Height = Dim.Sized(3),
+                CanFocus = false
             };
 
             win.Add(upTimeWidget);
@@ -140,7 +125,8 @@ namespace wttop
                 X = 0,
                 Y = 2,
                 Width = Dim.Fill(),
-                Height = Dim.Sized(3)
+                Height = Dim.Sized(3),
+                CanFocus = false
             };
 
             win.Add(systemTimeWidget);
@@ -150,7 +136,8 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(18)
+                Height= Dim.Sized(18),
+                CanFocus = false
             };
             
             win.Add(cpuRamWidget);
@@ -160,7 +147,8 @@ namespace wttop
                 X = Pos.Right(cpuRamWidget),
                 Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(18)
+                Height= Dim.Sized(18),
+                CanFocus = false
             };
 
             win.Add(viewTopRight);
@@ -170,7 +158,8 @@ namespace wttop
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height= Dim.Sized(6)
+                Height= Dim.Sized(6),
+                CanFocus = false
             };
 
             var diskWidget = new DiskWidget(serviceProvider)
@@ -178,7 +167,8 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(networkWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Fill()
+                Height= Dim.Fill(),
+                CanFocus = false
             };
 
             viewTopRight.Add(networkWidget);
@@ -189,10 +179,47 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(cpuRamWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Fill()
+                Height = Dim.Fill() - 1,
+                CanFocus = false
             };
 
             win.Add(processListWidget);
+
+            var toolbarView = new View()
+            {
+                X = 0,
+                Y = Pos.Bottom(processListWidget),
+                CanFocus = true
+            };
+
+            win.Add(toolbarView);
+
+            toolbarView.Add(
+                new Button("Cpu")
+                {
+                    X = 2,
+                    Y = 0,
+                    Clicked = () => {processListWidget.SetOrderBy(ProcessListOrder.CPU);}
+                },
+                new Button("Memory")
+                {
+                    X = 9,
+                    Y = 0,
+                    Clicked = () => {processListWidget.SetOrderBy(ProcessListOrder.MEMORY);}
+                },
+                new Button("Quit")
+                {
+                    X = 24,
+                    Y = 0,
+                    Clicked = () => {top.Running = false;}
+                },
+                new Button("About")
+                {
+                    X = 33,
+                    Y = 0,
+                    Clicked = () => {Application.Run(AboutDialog());}
+                }
+            );
 
             // Refresh section. Every second, update on all listed widget will be called
             // Each seconds the UI refreshs, but a frequency can be set by overridind the property RefreshTimeSeconds for each widdget

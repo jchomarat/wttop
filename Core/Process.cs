@@ -8,26 +8,15 @@ namespace wttop.Core {
     {
         public string Name {get; set; }
 
-        public int PercentProcessorTime {get; set; }
+        public double PercentProcessorTime {get; set; }
 
         public int IDProcess {get; set; }
 
+        public string Owner {get; set;}
+
         public int ThreadCount {get; set; }
 
-        public int HandleCount {get; set; }
-
-        public long MemoryUsageB {get; set; }
-
-        public double MemoryUsageMB
-        {
-            get
-            {
-                double d = MemoryUsageB/1024.0/1024.0;
-                return Math.Round(d, 1);
-            }
-        }
-
-        public int PriorityBase {get; set; }
+        public long MemoryUsageMb {get; set; }
     }
 
     public class Process
@@ -46,22 +35,22 @@ namespace wttop.Core {
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop10
+        public IEnumerable<ProcessInfo> GetTop15CPU
         {
             get
             {
                 return processes
                     .OrderByDescending(p => p.PercentProcessorTime)
-                    .Take(10);
+                    .Take(15);
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop15
+        public IEnumerable<ProcessInfo> GetTop15Memory
         {
             get
             {
                 return processes
-                    .OrderByDescending(p => p.PercentProcessorTime)
+                    .OrderByDescending(p => p.MemoryUsageMb)
                     .Take(15);
             }
         }
