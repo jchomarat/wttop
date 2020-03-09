@@ -35,22 +35,22 @@ namespace wttop.Core {
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop10
+        public IEnumerable<ProcessInfo> GetTop15CPU
         {
             get
             {
                 return processes
                     .OrderByDescending(p => p.PercentProcessorTime)
-                    .Take(10);
+                    .Take(15);
             }
         }
 
-        public IEnumerable<ProcessInfo> GetTop15
+        public IEnumerable<ProcessInfo> GetTop15Memory
         {
             get
             {
                 return processes
-                    .OrderByDescending(p => p.PercentProcessorTime)
+                    .OrderByDescending(p => p.MemoryUsageMb)
                     .Take(15);
             }
         }

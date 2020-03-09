@@ -9,6 +9,11 @@ using wttop.Widgets.Common;
 
 namespace wttop.Widgets {
 
+    public enum ProcessListOrder
+    {
+        CPU, MEMORY
+    }
+
     /// <summary>
     /// Widget to list running processes.
     /// This class also uses Grid, a generic component that draws a grid.
@@ -19,6 +24,8 @@ namespace wttop.Widgets {
 
         ProcessListDataSourceBuilder dataSource;
 
+        ProcessListOrder orderBy = ProcessListOrder.CPU;
+
         protected override int RefreshTimeSeconds
         {
             get
@@ -27,12 +34,17 @@ namespace wttop.Widgets {
             }
         }
 
+        public void SetOrderBy(ProcessListOrder Order)
+        {
+            orderBy = Order;
+        }
+
         public ProcessListWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
 
         protected override void DrawWidget()
         {
-            this.Title = settings.ProcessesListWidgetTitle;
-            
+            this.Title = settings.ProcessesListWidgetTitle;            
+
             dataSource = new ProcessListDataSourceBuilder();
             dataSource.HeaderStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListWidgetHeaderTextColor, settings.ProcessesListWidgetHeaderBackgroundColor);
             dataSource.FooterStyle = Terminal.Gui.Attribute.Make(settings.ProcessesListWidgetFooterTextColor, settings.ProcessesListWidgetFooterBackgroundColor);
@@ -41,7 +53,7 @@ namespace wttop.Widgets {
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height = Dim.Fill()
+                Height = Dim.Fill() 
             };
 
             Add(grid);
@@ -51,7 +63,17 @@ namespace wttop.Widgets {
         {
             var processList = await systemInfo.GetProcessActivity();
             dataSource.TotalProcessesCount = processList.Processes.Count();
-            grid.Update(MainLoop, processList.GetTop15.ToList());
+            
+            switch(orderBy)
+            {
+                case ProcessListOrder.CPU:
+                    grid.Update(MainLoop, processList.GetTop15CPU.ToList());
+                    break;
+
+                case ProcessListOrder.MEMORY:
+                    grid.Update(MainLoop, processList.GetTop15Memory.ToList());
+                    break;
+            }            
         }
     }
 
@@ -79,7 +101,7 @@ namespace wttop.Widgets {
             return new string[] {
                 "Name", 
                 "ID", 
-                "CPU% |", 
+                "CPU%", 
                 "Memory(MB)",
                 "ThreadCount",  
                 "Owner"
