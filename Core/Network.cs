@@ -2,47 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace wttop.Core {
-
-    public class InterfaceDetails
-    {
-        public string Name {get; set; }
-
-        public long BytesReceived {get; set; }
-       
-        public long BytesSent {get; set; }
-    }
-
+namespace wttop.Core
+{
+    /// <summary>
+    /// The network class
+    /// </summary>
     public class Network
     {
-        List<InterfaceDetails> interfaces = new List<InterfaceDetails>();
+        /// <summary>
+        /// List of network interfaces
+        /// </summary>
+        public List<InterfaceDetails> Interfaces { get; set; } = new List<InterfaceDetails>();
 
-        public List<InterfaceDetails> Interfaces
-        {
-            get
-            {
-                return interfaces;
-            }
-            set 
-            {
-                interfaces = value;
-            }
-        }
-        
-        public long TotalBytesReceived
-        {
-            get 
-            {
-                return interfaces.Sum(inter => inter.BytesReceived);
-            }
-        }
-       
-        public long TotalBytesSent
-        {
-            get 
-            {
-                return interfaces.Sum(inter => inter.BytesSent);
-            }
-        }
+        /// <summary>
+        /// Total number of bytes received by the network adapter
+        /// </summary>
+        public long TotalBytesReceived => Interfaces.Sum(inter => inter.BytesReceived);
+
+        /// <summary>
+        /// Total number of bytes sent by the network adapter
+        /// </summary>
+        public long TotalBytesSent => Interfaces.Sum(inter => inter.BytesSent);
     }
 }

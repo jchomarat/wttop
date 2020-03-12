@@ -9,6 +9,11 @@ namespace wttop.Core {
     /// </summary>
     public class WmiReader
     {
+        /// <summary>
+        /// Execute a scalar query and get back the management base objects
+        /// </summary>
+        /// <param name="QueryString">The query to execute</param>
+        /// <returns>Management base object</returns>
         public Task<ManagementBaseObject> ExecuteScalar(string QueryString)
         {
             var tsc = new TaskCompletionSource<ManagementBaseObject>();
@@ -26,6 +31,11 @@ namespace wttop.Core {
             }
         }
 
+        /// <summary>
+        /// Execute a query and get back a list of management base objects
+        /// </summary>
+        /// <param name="QueryString">The querry to execute</param>
+        /// <returns>Management base object</returns>
         public Task<List<ManagementBaseObject>> Execute(string QueryString)
         {
             var tsc = new TaskCompletionSource<List<ManagementBaseObject>>();

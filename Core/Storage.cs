@@ -1,45 +1,56 @@
 using System;
 
-namespace wttop.Core {
+namespace wttop.Core
+{
 
-    public class Storage {
+    /// <summary>
+    /// The storage class
+    /// </summary>
+    public class Storage
+    {
+        /// <summary>
+        /// Get or set the volume caption
+        /// </summary>
+        public string VolumeCaption { get; set; }
 
-        public string VolumeCaption {get; set; }
+        /// <summary>
+        /// Get or set the volume name
+        /// </summary>
+        public string VolumeName { get; set; }
 
-        public string VolumeName {get; set; }
+        /// <summary>
+        /// Get or set the total size in kilo bytes
+        /// </summary>
+        public long TotalKb { get; set; }
 
-        public long TotalKb {get; set; }
-       
-        public long AvailableKb {get; set; }
+        /// <summary>
+        /// Get or set the available size in kilo bytes
+        /// </summary>
+        public long AvailableKb { get; set; }
 
-        public long UsedKb {
-            get {
-                return TotalKb - AvailableKb;
-            }
-        }
+        /// <summary>
+        /// Get the used size in kilo bytes
+        /// </summary>
+        public long UsedKb => TotalKb - AvailableKb;
 
-        public decimal AvailableGB {
-            get {
-                return Math.Round((decimal)AvailableKb/(1024*1024), 1); 
-            }
-        }
+        /// <summary>
+        /// Get the available size in giga bytes
+        /// </summary>
+        public decimal AvailableGB => Math.Round((decimal)AvailableKb / (1024 * 1024), 1);
 
-        public decimal UsedGB {
-            get {
-                return Math.Round((decimal)UsedKb/(1024*1024), 1); 
-            }
-        }
+        /// <summary>
+        /// Get the used size in giga bytes
+        /// </summary>
+        public decimal UsedGB => Math.Round((decimal)UsedKb / (1024 * 1024), 1);
 
-        public decimal TotalGB {
-            get {
-                return Math.Round((decimal)TotalKb/(1024*1024), 1); 
-            }
-        }
+        /// <summary>
+        /// Get the total size in giga bytes
+        /// </summary>
+        public decimal TotalGB => Math.Round((decimal)TotalKb / (1024 * 1024), 1);
 
-        public int PercentageUsed {
-            get {
-                return (int)Math.Floor((decimal)(100*UsedKb)/TotalKb);
-            }
-        }
+        /// <summary>
+        /// Get the percentage size used
+        /// </summary>
+        public int PercentageUsed => (int)Math.Floor((decimal)(100 * UsedKb) / TotalKb);
     }
 }
