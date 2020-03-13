@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace wttop.Core
 {
+    /// <summary>
+    /// CPU utilisation reader
+    /// </summary>
     internal class CpuUtilizationReader
     {
         private struct ProcessCpuInformation
@@ -14,6 +17,9 @@ namespace wttop.Core
 
         private ProcessCpuInformation _processCpuInfo = new ProcessCpuInformation();
 
+        /// <summary>
+        /// Get the current utilization precentage
+        /// </summary>
         public int CurrentUtilization
         {
             get

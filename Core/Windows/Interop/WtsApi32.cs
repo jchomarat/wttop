@@ -9,7 +9,7 @@ namespace wttop.Core
         [Flags]
         internal enum WtsInfoClass
         {
-            WTSUserName = 5, 
+            WTSUserName = 5,
             WTSDomainName = 7,
         }
 

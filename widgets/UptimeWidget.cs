@@ -3,27 +3,25 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
 
-namespace wttop.Widgets {
+namespace wttop.Widgets
+{
 
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
     public class UptimeWidget : WidgetFrameless
-    { 
-        Label textLabel;
+    {
+        private const string headerText = "Uptime: ";
+        private const string contentTemplate = "{0}";
 
-        string headerText = "Uptime: ";
-        
-        string contentTemplate = "{0}";
+        private Label _textLabel;
 
-        protected override int RefreshTimeSeconds
-        {
-            get
-            {
-                return 60;
-            }
-        }
+        protected override int RefreshTimeSeconds => 60;
 
+        /// <summary>
+        /// Main constructor for the uptime widget
+        /// </summary>
+        /// <param name="serviceProvider">A service provider</param>
         public UptimeWidget(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         protected override void DrawWidget()
@@ -36,19 +34,19 @@ namespace wttop.Widgets {
             headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelWidgetHeaderColor, settings.MainBackgroundColor);
             Add(headerLabel);
 
-            textLabel = new Label(string.Empty)
+            _textLabel = new Label(string.Empty)
             {
                 X = Pos.Right(headerLabel),
                 Y = 1
             };
-           
-            Add(textLabel);
+
+            Add(_textLabel);
         }
 
         protected override async Task Update(MainLoop MainLoop)
         {
             var upt = await systemInfo.GetSystemUpTime();
-            textLabel.Text = string.Format(contentTemplate, upt.UpTimeForHuman);
+            _textLabel.Text = string.Format(contentTemplate, upt.UpTimeForHuman);
         }
     }
 }

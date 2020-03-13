@@ -3,22 +3,24 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
 
-namespace wttop.Widgets {
+namespace wttop.Widgets
+{
 
     /// <summary>
     /// Widget that will display the network graph
     /// </summary>
     public class NetworkWidget : WidgetFrame
-    { 
-        Label upl;
-        
-        Label dl;
+    {
+        private Label _upl;
+        private Label _dl;
+        private long _valueUpl = 0;
+        private long _valueDl = 0;
 
-        long valueUpl = 0;
-        
-        long valueDl = 0;
-
-        public NetworkWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        /// <summary>
+        /// Main constructor for the network widget
+        /// </summary>
+        /// <param name="serviceProvider">A service provider</param>
+        public NetworkWidget(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         protected override void DrawWidget()
         {
@@ -32,15 +34,15 @@ namespace wttop.Widgets {
 
             Add(titleDl);
 
-            dl = new Label(string.Empty)
+            _dl = new Label(string.Empty)
             {
                 X = Pos.Right(titleDl),
                 Y = 1
             };
 
-            dl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetDownloadTextColor, settings.MainBackgroundColor);
-           
-            Add(dl);
+            _dl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetDownloadTextColor, settings.MainBackgroundColor);
+
+            Add(_dl);
 
             Label titleUpl = new Label("Upload (kB/sec)  : ")
             {
@@ -50,36 +52,36 @@ namespace wttop.Widgets {
 
             Add(titleUpl);
 
-            upl = new Label(string.Empty)
+            _upl = new Label(string.Empty)
             {
-                X = Pos.Right(dl),
-                Y = Pos.Bottom(dl)
+                X = Pos.Right(_dl),
+                Y = Pos.Bottom(_dl)
             };
 
-            upl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetUploadTextColor, settings.MainBackgroundColor);
+            _upl.TextColor = Terminal.Gui.Attribute.Make(settings.NetworkWidgetUploadTextColor, settings.MainBackgroundColor);
 
-            Add(upl);
+            Add(_upl);
 
-            
+
         }
         protected override async Task Update(MainLoop MainLoop)
         {
             var network = await systemInfo.GetNetworkStatistics();
-            if (valueDl == 0)
+            if (_valueDl == 0)
             {
                 // First round, don't do anything
-                valueDl = network.TotalBytesReceived;
-                valueUpl = network.TotalBytesSent;
+                _valueDl = network.TotalBytesReceived;
+                _valueUpl = network.TotalBytesSent;
             }
             else
             {
-                var i = ((network.TotalBytesSent - valueUpl)/100);
-                upl.Text = $"{i}             ";
-                valueUpl = network.TotalBytesSent;
+                var i = ((network.TotalBytesSent - _valueUpl) / 100);
+                _upl.Text = $"{i}             ";
+                _valueUpl = network.TotalBytesSent;
 
-                var j = ((network.TotalBytesReceived - valueDl)/100);
-                dl.Text = $"{j}              ";
-                valueDl = network.TotalBytesReceived;
+                var j = ((network.TotalBytesReceived - _valueDl) / 100);
+                _dl.Text = $"{j}              ";
+                _valueDl = network.TotalBytesReceived;
             }
         }
     }

@@ -3,28 +3,26 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
 
-namespace wttop.Widgets {
+namespace wttop.Widgets
+{
 
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
     public class OSInfoWidget : WidgetFrameless
-    { 
-        Label textLabel;
+    {
+        private string headerText = "Operating system: ";
+        private string contentTemplate = "{0} on {1} (version {2})";
 
-        string headerText = "Operating system: ";
-        
-        string contentTemplate = "{0} on {1} (version {2})";
+        private Label _textLabel;
 
-        protected override int RefreshTimeSeconds
-        {
-            get
-            {
-                return 60;
-            }
-        }
+        protected override int RefreshTimeSeconds => 60;
 
-        public OSInfoWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        /// <summary>
+        /// Main constructor to build the information widget
+        /// </summary>
+        /// <param name="serviceProvider">A service provider</param>
+        public OSInfoWidget(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         protected override void DrawWidget()
         {
@@ -36,19 +34,19 @@ namespace wttop.Widgets {
             headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelWidgetHeaderColor, settings.MainBackgroundColor);
             Add(headerLabel);
 
-            textLabel = new Label(string.Empty)
+            _textLabel = new Label(string.Empty)
             {
                 X = Pos.Right(headerLabel),
                 Y = 1
             };
-           
-            Add(textLabel);
+
+            Add(_textLabel);
         }
-        
+
         protected override async Task Update(MainLoop MainLoop)
         {
             var osInfo = await systemInfo.GetOSInfo();
-            textLabel.Text = string.Format(contentTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
+            _textLabel.Text = string.Format(contentTemplate, osInfo.MachineName, osInfo.OSName, osInfo.Version);
         }
     }
 }

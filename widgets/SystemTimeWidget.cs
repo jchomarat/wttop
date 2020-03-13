@@ -3,28 +3,22 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using Mono.Terminal;
 
-namespace wttop.Widgets {
+namespace wttop.Widgets
+{
 
     /// <summary>
     /// Widget that will display the text on top of the app
     /// </summary>
     public class SystemTimeWidget : WidgetFrameless
-    { 
-        Label textLabel;
+    {
+        private const string headerText = "System time: ";
+        private const string contentTemplate = "{0}";
 
-        string headerText = "System time: ";
-        
-        string contentTemplate = "{0}";
+        private Label _textLabel;
 
-        protected override int RefreshTimeSeconds
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        protected override int RefreshTimeSeconds => 1;
 
-        public SystemTimeWidget(IServiceProvider serviceProvider) : base(serviceProvider) {}
+        public SystemTimeWidget(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
         protected override void DrawWidget()
         {
@@ -36,19 +30,19 @@ namespace wttop.Widgets {
             headerLabel.TextColor = Terminal.Gui.Attribute.Make(settings.LabelWidgetHeaderColor, settings.MainBackgroundColor);
             Add(headerLabel);
 
-            textLabel = new Label(string.Empty)
+            _textLabel = new Label(string.Empty)
             {
                 X = Pos.Right(headerLabel),
                 Y = 1
             };
-           
-            Add(textLabel);
+
+            Add(_textLabel);
         }
-        
+
         protected override async Task Update(MainLoop MainLoop)
         {
             var time = await systemInfo.GetSystemDateTime();
-            textLabel.Text = string.Format(contentTemplate, time.ToString());
+            _textLabel.Text = string.Format(contentTemplate, time.ToString());
         }
     }
 }

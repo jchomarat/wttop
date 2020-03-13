@@ -1,47 +1,26 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace wttop.Core {
-
-    public class DiskDetails
-    {
-        public string Name {get; set; }
-
-        public long BytesRead {get; set; }
-       
-        public long BytesWrite {get; set; }
-    }
-
+namespace wttop.Core
+{
+    /// <summary>
+    /// Disk details
+    /// </summary>
     public class Disk
     {
-        List<DiskDetails> disks = new List<DiskDetails>();
+        /// <summary>
+        /// A list of disk
+        /// </summary>
+        public List<DiskDetails> Disks { get; set; } = new List<DiskDetails>();
 
-        public List<DiskDetails> Disks
-        {
-            get
-            {
-                return disks;
-            }
-            set 
-            {
-                disks = value;
-            }
-        }
-        
-        public long TotalBytesWritten
-        {
-            get 
-            {
-                return Disks.Sum(d => d.BytesWrite);
-            }
-        }
-       
-        public long TotalBytesRead
-        {
-            get 
-            {
-                return Disks.Sum(d => d.BytesRead);
-            }
-        }
+        /// <summary>
+        /// Total number of bytes written
+        /// </summary>
+        public long TotalBytesWritten => Disks.Sum(d => d.BytesWriten);
+
+        /// <summary>
+        /// Total number of bytes read
+        /// </summary>
+        public long TotalBytesRead => Disks.Sum(d => d.BytesRead);
     }
 }

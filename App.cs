@@ -12,9 +12,9 @@ namespace wttop
     /// <summary>
     /// Main class to start the application
     /// </summary>
-    class App
+    public class App
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             StartApp();
         }
@@ -48,7 +48,7 @@ namespace wttop
         /// <summary>
         /// Start the application
         /// </summary>
-        static void StartApp()
+        public static void StartApp()
         {
             // Use injection to send the driver implementation to the core
             ServiceCollection serviceCollection = new ServiceCollection();
@@ -76,7 +76,7 @@ namespace wttop
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error - could not initialize the application. The inner exception is {ex.Message}");
+                Console.WriteLine($"Error - could not initialize the application. The inner exception is {ex}");
             }
 
             // Build the application UI with widgets
@@ -136,10 +136,10 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Percent(50),
-                Height= Dim.Sized(18),
+                Height = Dim.Sized(18),
                 CanFocus = false
             };
-            
+
             win.Add(cpuRamWidget);
 
             var viewTopRight = new View()
@@ -147,7 +147,7 @@ namespace wttop
                 X = Pos.Right(cpuRamWidget),
                 Y = Pos.Bottom(systemTimeWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Sized(18),
+                Height = Dim.Sized(18),
                 CanFocus = false
             };
 
@@ -158,7 +158,7 @@ namespace wttop
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
-                Height= Dim.Sized(6),
+                Height = Dim.Sized(6),
                 CanFocus = false
             };
 
@@ -167,7 +167,7 @@ namespace wttop
                 X = 0,
                 Y = Pos.Bottom(networkWidget),
                 Width = Dim.Fill(),
-                Height= Dim.Fill(),
+                Height = Dim.Fill(),
                 CanFocus = false
             };
 
@@ -199,34 +199,35 @@ namespace wttop
                 {
                     X = 2,
                     Y = 0,
-                    Clicked = () => {processListWidget.SetOrderBy(ProcessListOrder.CPU);}
+                    Clicked = () => { processListWidget.Order = ProcessListOrder.Cpu; }
                 },
                 new Button("Memory")
                 {
                     X = 9,
                     Y = 0,
-                    Clicked = () => {processListWidget.SetOrderBy(ProcessListOrder.MEMORY);}
+                    Clicked = () => { processListWidget.Order = ProcessListOrder.Memory; }
                 },
                 new Button("Quit")
                 {
                     X = 24,
                     Y = 0,
-                    Clicked = () => {top.Running = false;}
+                    Clicked = () => { top.Running = false; }
                 },
                 new Button("About")
                 {
                     X = 33,
                     Y = 0,
-                    Clicked = () => {Application.Run(AboutDialog());}
+                    Clicked = () => { Application.Run(AboutDialog()); }
                 }
             );
 
             // Refresh section. Every second, update on all listed widget will be called
             // Each seconds the UI refreshs, but a frequency can be set by overridind the property RefreshTimeSeconds for each widdget
             int tick = 0;
-            var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) => {
+            var token = Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), (MainLoop) =>
+            {
                 // List all component to refresh
-                Task.Run(async () => 
+                Task.Run(async () =>
                 {
                     await osInfoWidget.RefreshIfNeeded(MainLoop, tick);
                     await upTimeWidget.RefreshIfNeeded(MainLoop, tick);
@@ -236,10 +237,10 @@ namespace wttop
                     await diskWidget.RefreshIfNeeded(MainLoop, tick);
                     await processListWidget.RefreshIfNeeded(MainLoop, tick);
                 });
-                tick ++;
+                tick++;
                 // Every hour put it back to 0
                 if (tick > 360) tick = 1;
-                
+
                 return true;
             });
 
@@ -247,9 +248,9 @@ namespace wttop
             {
                 Application.Run();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error - could not launch the application. The inner exception is {ex.Message}");
+                Console.WriteLine($"Error - could not launch the application. The inner exception is {ex}");
             }
         }
     }

@@ -1,10 +1,19 @@
 
-namespace wttop.Core {
-
+namespace wttop.Core
+{
+    /// <summary>
+    /// Cpu class
+    /// </summary>
     public class Cpu
     {
-        public string Name {get; set; }
-        
-        public int PercentageUsage {get; set; }
+        /// <summary>
+        /// Get or set the CPU name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Get or set the percentage of CPU used
+        /// </summary>
+        public int PercentageUsage { get; set; }
     }
 }
