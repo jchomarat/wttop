@@ -32,7 +32,7 @@ The widgets available are:
 
 With *dotnetcore 3.1*, only one self-contained .exe file is used. You do not even need to have *dotnetcore 3.1* installed on your machine.
 
-Simply download the [latest version](https://github.com/jchomarat/wttop/releases), store it somewhere in your *$path*, and run the command from the *terminal* (both *PowerShell* & *CMD shell*)
+Simply download the [latest version](https://github.com/jchomarat/wttop/releases), store it somewhere in your *$path*, and run the command from a *terminal* 
 
 ```sh
 /> wttop.exe
@@ -40,7 +40,19 @@ Simply download the [latest version](https://github.com/jchomarat/wttop/releases
 
 ### Via scoop
 
-*coming soon*
+If yo do not know [Scoop](https://scoop.sh/), go and check it out. I find it easier than Chocolatey.
+
+Once [Scoop](https://scoop.sh/) is installed on your machine, simply run the following command:
+
+```sh
+/> scoop install wttop
+```
+
+Then, you can run
+
+```sh
+/> wttop.exe
+```
 
 ## Usage
 
